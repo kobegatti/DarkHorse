@@ -14,6 +14,7 @@ export default function App() {
       <Text>Now it's time for... IOS simulator(Hackintosh VirtualBox?)</Text>
       <Text>On VD!</Text>
       <Text>Shrimp pasta</Text>
+      <Text>Testing Git!!!</Text>
       <StatusBar style="auto" />
     </View>
   );
