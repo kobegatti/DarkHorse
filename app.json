@@ -29,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Equine mobile app connecting clients with horse professionals.",
+    "githubUrl": "https://github.com/kobegatti/DarkHorse"
   }
 }
