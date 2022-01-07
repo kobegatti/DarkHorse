@@ -67,5 +67,5 @@ Run apps on a hardware device  |  Android Developers
 Unit Testing – JEST
 	Testing suite = <filename>.test.js
 	Run all test suites: npm run test
-	Run a specific test suite: npm test path/of/test/suite file.test.js
+	Run a specific test suite: npm test specificTestSuite.test.js
 	
