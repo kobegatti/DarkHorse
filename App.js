@@ -1,22 +1,109 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  Image,
+  SafeAreaView,
+  Alert,
+  Button,
+  Platform,
+  StatusBar,
+} from "react-native";
+
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+import LogInScreen from "./components/LogInScreen";
+import SignUpScreen from "./components/SignUpScreen";
+import Dashboard from "./components/Dashboard";
+
+const Stack = createStackNavigator();
+
+function StackRoutes() {
+  return (
+    <Stack.Navigator
+      initialRouteName="LogInScreen"
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: "#000000", // header color
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "normal",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="LogInScreen"
+        component={LogInScreen}
+        options={{ title: "Login" }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{ title: "Sign Up" }}
+      />
+      {/* <Stack.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={({ title: "Dashboard" }, { headerLeft: null })}
+      /> */}
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   console.log("App executed");
+  const handlePress = () => console.log("Text pressed");
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>Let's go DarkHorse</Text>
-      <Text>More text is it updating?</Text>
-      <Text>What's good people?</Text>
-      <Text>Testing Git!!!</Text>
-      <Text>By March, we will have a working mobile app</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <StackRoutes />
+    </NavigationContainer>
+    // <SafeAreaView style={[styles.container, containerStyle]}>
+    //   <Text onPress={handlePress}>Hello React Native</Text>
+
+    //   <TouchableHighlight
+    //     onPress={() => Alert.alert("My Title", "Image Pressed Alert")}
+    //   >
+    //     <Image
+    //       blurRadius={1}
+    //       fadeDuration={1000}
+    //       resizeMode="contain"
+    //       source={{
+    //         width: 200,
+    //         height: 300,
+    //         uri: "https://picsum.photos/200/300",
+    //       }}
+    //     />
+    //   </TouchableHighlight>
+    //   <Button
+    //     title="Log In"
+    //     onPress={() =>
+    //       Alert.alert("My Title", "Log In Pressed", [
+    //         { text: "Cancel", onPress: () => console.log("Cancel") },
+    //         { text: "Ok", onPress: () => console.log("Ok") },
+    //       ])
+    //     }
+    //   />
+    //   <Button
+    //     title="Sign Up"
+    //     onPress={() =>
+    //       Alert.alert("My Title", "Log In Pressed", [
+    //         { text: "Cancel", onPress: () => console.log("Cancel") },
+    //         { text: "Ok", onPress: () => console.log("Ok") },
+    //       ])
+    //     }
+    //   />
+    //   <StatusBar style="auto" />
+    // </SafeAreaView>
   );
 }
+
+const containerStyle = { backgroundColor: "lightblue" };
 
 const styles = StyleSheet.create({
   container: {
@@ -24,5 +111,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
