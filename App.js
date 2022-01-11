@@ -15,6 +15,7 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
+import LogInOrSignUp from "./components/LogInOrSignUp";
 import LogInScreen from "./components/LogInScreen";
 import SignUpScreen from "./components/SignUpScreen";
 import Dashboard from "./components/Dashboard";
@@ -24,7 +25,7 @@ const Stack = createStackNavigator();
 function StackRoutes() {
   return (
     <Stack.Navigator
-      initialRouteName="LogInScreen"
+      initialRouteName="LogInOrSignUp"
       screenOptions={{
         headerTitleAlign: "center",
         headerStyle: {
@@ -36,6 +37,11 @@ function StackRoutes() {
         },
       }}
     >
+      <Stack.Screen
+        name="LogInOrSignUp"
+        component={LogInOrSignUp}
+        options={{ title: "Welcome" }}
+      />
       <Stack.Screen
         name="LogInScreen"
         component={LogInScreen}

@@ -26,6 +26,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF",
       },
+      package: "com.DarkHorse.DarkHorse",
     },
     web: {
       favicon: "./assets/favicon.png",
