@@ -59,7 +59,7 @@ class LogInScreen extends Component {
 
         <Text
           style={styles.loginText}
-          onPress={() => this.props.navigation.navigate("SignUpScreen")}
+          onPress={() => this.props.navigation.navigate("SignUpProfile")}
         >
           Don't have account? Click here to sign up
         </Text>

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-class SignUpScreen extends Component {
+class SignUpScreenProfessional extends Component {
   constructor() {
     super();
     this.state = {
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default SignUpScreenProfessional;

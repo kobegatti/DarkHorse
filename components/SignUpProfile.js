@@ -11,22 +11,31 @@ import {
 } from "react-native";
 import LoginButton from "../buttons/LogInButton";
 
-class LogInOrSignUp extends Component {
+class SignUpProfile extends Component {
   render() {
     return (
       <View style={styles.content}>
         <Image source={require("../assets/favicon.png")} />
         <LoginButton
-          text="Log In"
+          text="Horse Owner"
           color="lightblue"
-          onPress={() => this.props.navigation.navigate("LogInScreen")}
+          onPress={() => this.props.navigation.navigate("SignUpScreenOwner")}
         />
         <Text styles={styles.or}>Or</Text>
         <LoginButton
-          text="Sign Up"
+          text="Horse Care Professional"
           color="lightblue"
-          onPress={() => this.props.navigation.navigate("SignUpProfile")}
+          onPress={() =>
+            this.props.navigation.navigate("SignUpScreenProfessional")
+          }
         />
+
+        <Text
+          style={styles.redirectText}
+          onPress={() => this.props.navigation.navigate("LogInScreen")}
+        >
+          Already have an account? Log In
+        </Text>
       </View>
     );
   }
@@ -90,4 +99,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-export default LogInOrSignUp;
+
+export default SignUpProfile;
