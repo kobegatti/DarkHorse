@@ -21,7 +21,7 @@ export default function App() {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      // console.log(location);
+      console.log(location);
     })();
   }, []);
 
@@ -32,17 +32,8 @@ export default function App() {
     text = JSON.stringify(location);
   }
 
-  if (!latitude || !longitude) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ fontSize: 48 }}>Loading...</Text>
-      </View>
-    );
-  }
-
   return (
     <MapView
-      showsUserLocation
       style={{ flex: 1 }}
       initialRegion={{
         latitude: latitude,

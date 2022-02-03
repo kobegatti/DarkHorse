@@ -21,7 +21,7 @@ export default function App() {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      // console.log(location);
+      console.log(location);
     })();
   }, []);
 

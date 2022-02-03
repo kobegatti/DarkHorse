@@ -6,8 +6,6 @@ import MapView from "react-native-maps";
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -19,9 +17,7 @@ export default function App() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      setLatitude(location.coords.latitude);
-      setLongitude(location.coords.longitude);
-      // console.log(location);
+      console.log(location);
     })();
   }, []);
 
@@ -32,26 +28,7 @@ export default function App() {
     text = JSON.stringify(location);
   }
 
-  if (!latitude || !longitude) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ fontSize: 48 }}>Loading...</Text>
-      </View>
-    );
-  }
-
-  return (
-    <MapView
-      showsUserLocation
-      style={{ flex: 1 }}
-      initialRegion={{
-        latitude: latitude,
-        longitude: longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-    ></MapView>
-  );
+  return <MapView></MapView>;
 }
 
 const styles = StyleSheet.create({

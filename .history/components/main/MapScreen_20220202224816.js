@@ -21,7 +21,7 @@ export default function App() {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      // console.log(location);
+      console.log(location);
     })();
   }, []);
 
@@ -30,14 +30,6 @@ export default function App() {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
-  }
-
-  if (!latitude || !longitude) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ fontSize: 48 }}>Loading...</Text>
-      </View>
-    );
   }
 
   return (
