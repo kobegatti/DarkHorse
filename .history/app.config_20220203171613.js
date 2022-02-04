@@ -27,7 +27,7 @@ export default {
         backgroundColor: "#FFFFFF",
       },
       package: "com.DarkHorse.CareX",
-      versionCode: 1.1,
+      versionCode: 1.0.1,
     },
     web: {
       favicon: "./assets/favicon.png",

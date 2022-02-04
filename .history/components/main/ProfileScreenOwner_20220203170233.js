@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 const ProfileScreenOwner = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
+  const [mounted, setMounted] = useState(false);
 
   const handleSignOut = () => {
     auth
@@ -29,7 +30,6 @@ const ProfileScreenOwner = (props) => {
   };
 
   useEffect(() => {
-    console.log("useEffect");
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()

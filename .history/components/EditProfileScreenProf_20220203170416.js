@@ -22,12 +22,12 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const EditProfileScreenProf = (props) => {
   const { currentUser } = props;
-  const [username, setUsername] = useState(currentUser.username);
-  const [title, setTitle] = useState(currentUser.title);
-  const [bio, setBio] = useState(currentUser.bio);
-  const [location, setLocation] = useState(currentUser.location);
-  const [workPhone, setWorkPhone] = useState(currentUser.workPhone);
-  const [workEmail, setWorkEmail] = useState(currentUser.workEmail);
+  const [username, setUsername] = useState("");
+  const [title, setTitle] = useState("");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [workPhone, setWorkPhone] = useState("");
+  const [workEmail, setWorkEmail] = useState("");
   const navigation = useNavigation();
 
   const handleUpdate = async (props) => {

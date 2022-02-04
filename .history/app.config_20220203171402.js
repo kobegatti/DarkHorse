@@ -2,11 +2,11 @@ import "dotenv/config";
 
 export default {
   expo: {
-    name: "CareX",
-    slug: "CareX",
-    version: "1.0.1",
+    name: "DarkHorse",
+    slug: "DarkHorse",
+    version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/logo.png",
+    icon: "./assets/icon.png",
     splash: {
       image: "./assets/splash.png",
       resizeMode: "contain",
@@ -18,7 +18,7 @@ export default {
     assetBundlePatterns: ["**/*"],
     ios: {
       bundleIdentifier: "com.DarkHorse.CareX",
-      buildNumber: "1.0.1",
+      buildNumber: "1.0.0",
       supportsTablet: true,
     },
     android: {
@@ -27,7 +27,7 @@ export default {
         backgroundColor: "#FFFFFF",
       },
       package: "com.DarkHorse.CareX",
-      versionCode: 1.1,
+      versionCode: 1,
     },
     web: {
       favicon: "./assets/favicon.png",

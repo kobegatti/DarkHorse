@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 const ProfileScreenOwner = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
+  const [mounted, setMounted] = useState(false);
 
   const handleSignOut = () => {
     auth
@@ -29,21 +30,24 @@ const ProfileScreenOwner = (props) => {
   };
 
   useEffect(() => {
-    console.log("useEffect");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-        } else {
-          console.log("user does not exist");
-        }
-      });
-    props.navigation.addListener("focus", () => setLoading(!loading));
+    if (!mounted) {
+      db.collection("Users")
+        .doc(auth.currentUser.uid)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            setCurrentUser(snapshot.data());
+            setMounted(true);
+          } else {
+            console.log("user does not exist");
+          }
+        });
+      props.navigation.addListener("focus", () => setLoading(!loading));
+    }
   }, [props.navigation, loading]);
 
   if (!currentUser) {
+    setMounted(false);
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontSize: 48 }}>Loading...</Text>
