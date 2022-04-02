@@ -25,11 +25,11 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 import LogInScreen from "./components/LogInScreen";
 import SignUpScreen from "./components/SignUpScreen";
 import EditProfileScreenOwner from "./components/OwnerScreens/EditProfileScreenOwner";
-import EditProfileScreenProf from "./components/ProfScreens/EditProfileScreenProf";
-import CareX from "./components/OwnerScreens/CareX";
+import EditProfileScreenProf from "./components/EditProfileScreenProf";
+import CareX from "./components/CareX";
 import { Dimensions } from "react-native";
 import { user } from "./redux/reducers/user";
-import CareXProf from "./components/ProfScreens/CareXProf";
+import CareXProf from "./components/CareXProf";
 
 const dimensions = Dimensions.get("window");
 const imageHeight = (dimensions.height * 9) / 16;
