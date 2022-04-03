@@ -65,7 +65,7 @@ const ProfileScreenProf = (props) => {
             />
           ) : (
             <Avatar.Image
-              source={require("../../assets/offline.png")}
+              source={require("../../assets/online.png")}
               size={30}
             />
           )}

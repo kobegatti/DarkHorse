@@ -58,18 +58,10 @@ const ProfileScreenProf = (props) => {
             source={require("../../assets/profile.png")}
             size={80}
           />
-          {currentUser.online ? (
-            <Avatar.Image
-              source={require("../../assets/online.png")}
-              size={30}
-            />
-          ) : (
-            <Avatar.Image
-              source={require("../../assets/offline.png")}
-              size={30}
-            />
-          )}
           <View style={{ marginLeft: 20 }}>
+            <Title style={(styles.title, { marginTop: 5, marginBottom: 5 })}>
+              {currentUser.online}
+            </Title>
             <Title style={(styles.title, { marginTop: 15, marginBottom: 5 })}>
               {currentUser.username}
             </Title>

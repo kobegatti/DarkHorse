@@ -5,8 +5,7 @@ import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
 import { auth, db } from "../config/firebase";
 
-export default function MapScreen(props) {
-  const [currentUser, setCurrentUser] = useState(props);
+export default function MapScreen() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState(null);
@@ -53,10 +52,6 @@ export default function MapScreen(props) {
 
   function updateAvailability() {
     console.log("updating");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: !isOnline })
-      .then(console.log("availability updated!"));
     setIsOnline(!isOnline);
   }
 
@@ -72,6 +67,10 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
+
+      console.log(latitude);
+      console.log(longitude);
+      // console.log(location);
     })();
   }, []);
 

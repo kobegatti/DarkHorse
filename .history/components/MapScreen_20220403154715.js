@@ -53,10 +53,7 @@ export default function MapScreen(props) {
 
   function updateAvailability() {
     console.log("updating");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: !isOnline })
-      .then(console.log("availability updated!"));
+    //db.collection("Users").doc()
     setIsOnline(!isOnline);
   }
 

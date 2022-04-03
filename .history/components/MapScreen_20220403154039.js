@@ -3,10 +3,9 @@ import { Platform, Text, View, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
-import { auth, db } from "../config/firebase";
+import { db } from "../config/firebase";
 
-export default function MapScreen(props) {
-  const [currentUser, setCurrentUser] = useState(props);
+export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState(null);
@@ -22,7 +21,7 @@ export default function MapScreen(props) {
       title={"Stop"}
       description={"Online/Offline Status"}
       pinColor={"green"}
-      onPress={() => updateAvailability()}
+      onPress={() => setIsOnline(!isOnline)}
     >
       <MapView.Callout>
         <View>
@@ -41,7 +40,7 @@ export default function MapScreen(props) {
       title={"Go Online"}
       description={"Online/Offline Status"}
       pinColor={"red"}
-      onPress={() => updateAvailability()}
+      onPress={() => setIsOnline(!isOnline)}
     >
       <MapView.Callout>
         <View>
@@ -52,12 +51,7 @@ export default function MapScreen(props) {
   );
 
   function updateAvailability() {
-    console.log("updating");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: !isOnline })
-      .then(console.log("availability updated!"));
-    setIsOnline(!isOnline);
+    // db.instance.collection('Users').doc()
   }
 
   useEffect(() => {
@@ -72,6 +66,10 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
+
+      console.log(latitude);
+      console.log(longitude);
+      // console.log(location);
     })();
   }, []);
 
