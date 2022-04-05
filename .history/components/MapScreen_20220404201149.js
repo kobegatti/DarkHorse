@@ -92,7 +92,7 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      //setIsOnline(isOnline);
+      setIsOnline(isOnline);
 
       db.collection("Users")
         .doc(auth.currentUser.uid)

@@ -4,7 +4,6 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
 import { auth, db } from "../config/firebase";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 export default function MapScreen(props) {
   const [currentUser, setCurrentUser] = useState(props);
@@ -13,63 +12,6 @@ export default function MapScreen(props) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
-  const [markers, setMarkers] = useState([]);
-
-  var online = (
-    <MapView.Marker
-      coordinate={{
-        latitude: latitude,
-        longitude: longitude,
-      }}
-      title={"Stop"}
-      description={"Online/Offline Status"}
-      pinColor={"green"}
-      onPress={() => updateAvailability()}
-    >
-      <MapView.Callout>
-        <View>
-          <Text>GO</Text>
-        </View>
-      </MapView.Callout>
-    </MapView.Marker>
-  );
-
-  var online2 = (
-    <MapView.Marker
-      coordinate={{
-        latitude: 35.3,
-        longitude: -120.65,
-      }}
-      title={"Stop"}
-      pinColor={"blue"}
-      onPress={() => updateAvailability()}
-    >
-      <MapView.Callout>
-        <View>
-          <Text>GO</Text>
-        </View>
-      </MapView.Callout>
-    </MapView.Marker>
-  );
-
-  var offline = (
-    <MapView.Marker
-      coordinate={{
-        latitude: latitude,
-        longitude: longitude,
-      }}
-      title={"Go Online"}
-      description={"Online/Offline Status"}
-      pinColor={"red"}
-      onPress={() => updateAvailability()}
-    >
-      <MapView.Callout>
-        <View>
-          <Text>OFF</Text>
-        </View>
-      </MapView.Callout>
-    </MapView.Marker>
-  );
 
   function updateAvailability() {
     console.log("updating");
@@ -92,25 +34,65 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      //setIsOnline(isOnline);
 
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .get()
-        .then((snapshot) => {
-          if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
-          } else {
-            console.log("No such document!");
-          }
-        });
+      console.log(latitude);
+      console.log(longitude);
+      var online = (
+        <MapView.Marker
+          coordinate={{
+            latitude: latitude,
+            longitude: longitude,
+          }}
+          title={"Stop"}
+          description={"Online/Offline Status"}
+          pinColor={"green"}
+          onPress={() => updateAvailability()}
+        >
+          <MapView.Callout>
+            <View>
+              <Text>GO</Text>
+            </View>
+          </MapView.Callout>
+        </MapView.Marker>
+      );
 
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .update({ latitude: latitude, longitude: longitude })
-        .then(console.log("location updated!"));
+      var online2 = (
+        <MapView.Marker
+          coordinate={{
+            latitude: latitude,
+            longitude: longitude,
+          }}
+          title={"Stop"}
+          description={"Online/Offline Status"}
+          pinColor={"green"}
+          onPress={() => updateAvailability()}
+        >
+          <MapView.Callout>
+            <View>
+              <Text>GO</Text>
+            </View>
+          </MapView.Callout>
+        </MapView.Marker>
+      );
 
-      // find online vets
+      var offline = (
+        <MapView.Marker
+          coordinate={{
+            latitude: latitude,
+            longitude: longitude,
+          }}
+          title={"Go Online"}
+          description={"Online/Offline Status"}
+          pinColor={"red"}
+          onPress={() => updateAvailability()}
+        >
+          <MapView.Callout>
+            <View>
+              <Text>OFF</Text>
+            </View>
+          </MapView.Callout>
+        </MapView.Marker>
+      );
     })();
   }, []);
 
@@ -142,8 +124,6 @@ export default function MapScreen(props) {
       }}
     >
       {isOnline ? online : offline}
-
-      {online2}
     </MapView>
   );
 }

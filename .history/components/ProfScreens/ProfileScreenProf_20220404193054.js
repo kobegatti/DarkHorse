@@ -20,14 +20,13 @@ const ProfileScreenProf = (props) => {
   const [currentUser, setCurrentUser] = useState(props);
 
   const handleSignOut = () => {
-    // turn offline on logout
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: false })
-      .then(() => console.log("offline now!"));
     auth
       .signOut()
       .then(() => {
+        db.collection("Users")
+          .doc(auth.currentUser.uid)
+          .update({ online: false })
+          .then(console.log("availability updated!"));
         props.navigation.navigate("LogInScreen");
       })
       .catch((error) => alert(error.message));

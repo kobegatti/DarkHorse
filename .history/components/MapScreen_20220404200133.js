@@ -92,16 +92,14 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      //setIsOnline(isOnline);
+      setIsOnline(isOnline);
 
       db.collection("Users")
         .doc(auth.currentUser.uid)
         .get()
         .then((snapshot) => {
-          if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
+          if (snapshot.exists()) {
           } else {
-            console.log("No such document!");
           }
         });
 

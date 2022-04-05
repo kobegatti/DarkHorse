@@ -20,11 +20,7 @@ const ProfileScreenProf = (props) => {
   const [currentUser, setCurrentUser] = useState(props);
 
   const handleSignOut = () => {
-    // turn offline on logout
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: false })
-      .then(() => console.log("offline now!"));
+    db.collection("Users").doc(auth.currentUser.uid).update({ online: false });
     auth
       .signOut()
       .then(() => {

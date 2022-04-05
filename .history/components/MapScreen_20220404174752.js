@@ -4,7 +4,6 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
 import { auth, db } from "../config/firebase";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 export default function MapScreen(props) {
   const [currentUser, setCurrentUser] = useState(props);
@@ -13,7 +12,6 @@ export default function MapScreen(props) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
-  const [markers, setMarkers] = useState([]);
 
   var online = (
     <MapView.Marker
@@ -37,11 +35,12 @@ export default function MapScreen(props) {
   var online2 = (
     <MapView.Marker
       coordinate={{
-        latitude: 35.3,
-        longitude: -120.65,
+        latitude: latitude,
+        longitude: longitude,
       }}
       title={"Stop"}
-      pinColor={"blue"}
+      description={"Online/Offline Status"}
+      pinColor={"green"}
       onPress={() => updateAvailability()}
     >
       <MapView.Callout>
@@ -92,25 +91,14 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      //setIsOnline(isOnline);
-
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .get()
-        .then((snapshot) => {
-          if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
-          } else {
-            console.log("No such document!");
-          }
-        });
 
       db.collection("Users")
         .doc(auth.currentUser.uid)
         .update({ latitude: latitude, longitude: longitude })
         .then(console.log("location updated!"));
 
-      // find online vets
+      console.log(latitude);
+      console.log(longitude);
     })();
   }, []);
 
@@ -142,8 +130,6 @@ export default function MapScreen(props) {
       }}
     >
       {isOnline ? online : offline}
-
-      {online2}
     </MapView>
   );
 }

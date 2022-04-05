@@ -4,7 +4,6 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
 import { auth, db } from "../config/firebase";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 export default function MapScreen(props) {
   const [currentUser, setCurrentUser] = useState(props);
@@ -92,18 +91,7 @@ export default function MapScreen(props) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      //setIsOnline(isOnline);
-
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .get()
-        .then((snapshot) => {
-          if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
-          } else {
-            console.log("No such document!");
-          }
-        });
+      setIsOnline(isOnline);
 
       db.collection("Users")
         .doc(auth.currentUser.uid)
