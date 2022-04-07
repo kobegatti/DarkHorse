@@ -10,8 +10,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import ProfileScreenProf from "./ProfileScreenProf";
-import MapScreenProf from "./MapScreenProf";
-import EmergencyRequests from "./EmergencyRequests";
+import MapScreen from "../MapScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -19,9 +18,6 @@ export class CareXProf extends Component {
   componentDidMount() {
     this.props.clearData();
     this.props.fetchUser();
-  }
-  componentWillUnmount() {
-    this.props.clearData();
   }
   handleSignOut = () => {
     auth
@@ -37,12 +33,12 @@ export class CareXProf extends Component {
     return (
       <Tab.Navigator initialRouteName="Map" labeled={false}>
         <Tab.Screen
-          name="EmergencyRequests"
-          component={EmergencyRequests}
+          name="Map"
+          component={MapScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
-                name="account-alert"
+                name="map-marker"
                 color={color}
                 size={26}
               ></MaterialCommunityIcons>
@@ -52,7 +48,7 @@ export class CareXProf extends Component {
 
         <Tab.Screen
           name="Map"
-          component={MapScreenProf}
+          component={MapScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons

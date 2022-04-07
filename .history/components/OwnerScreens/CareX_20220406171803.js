@@ -9,13 +9,13 @@ import { fetchUser, clearData } from "../../redux/actions/index";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import ProfileScreenProf from "./ProfileScreenProf";
-import MapScreenProf from "./MapScreenProf";
-import EmergencyRequests from "./EmergencyRequests";
+import ProfileScreenOwner from "./ProfileScreenOwner";
+import MapScreen from "../MapScreen";
+import EmergencyForm from "./EmergencyForm";
 
 const Tab = createMaterialBottomTabNavigator();
 
-export class CareXProf extends Component {
+export class CareX extends Component {
   componentDidMount() {
     this.props.clearData();
     this.props.fetchUser();
@@ -33,11 +33,11 @@ export class CareXProf extends Component {
   };
 
   render() {
-    // const { currentUser } = this.props;
+    //const { currentUser } = this.props;
     return (
       <Tab.Navigator initialRouteName="Map" labeled={false}>
         <Tab.Screen
-          name="EmergencyRequests"
+          name="EmergencyForm"
           component={EmergencyRequests}
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -52,7 +52,7 @@ export class CareXProf extends Component {
 
         <Tab.Screen
           name="Map"
-          component={MapScreenProf}
+          component={MapScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
@@ -65,7 +65,7 @@ export class CareXProf extends Component {
         />
         <Tab.Screen
           name="Profile"
-          component={ProfileScreenProf}
+          component={ProfileScreenOwner}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
@@ -80,7 +80,6 @@ export class CareXProf extends Component {
     );
   }
 }
-// {/* <Text>Email: {auth.currentUser?.email}</Text> */}
 
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
@@ -89,7 +88,7 @@ const mapStateToProps = (store) => ({
 const mapDispatchProps = (dispatch) =>
   bindActionCreators({ fetchUser, clearData }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchProps)(CareXProf);
+export default connect(mapStateToProps, mapDispatchProps)(CareX);
 
 const styles = StyleSheet.create({
   container: {
