@@ -21,13 +21,13 @@ export default function EmergencyForm() {
         <TextInput
           style={styles.formField}
           placeholder="Breed"
-          value={breed}
+          value={username}
           onChangeText={(val) => setBreed(val)}
         />
         <TextInput
           style={styles.formField}
-          placeholder="Type Of Emergency"
-          value={typeOfEmergency}
+          placeholder="Email"
+          value={email}
           onChangeText={(val) => setTypeOfEmergency(val)}
         />
 
@@ -35,10 +35,17 @@ export default function EmergencyForm() {
 
         <Button
           color="lightblue"
-          title="Request Vet"
+          title="Sign Up"
           disabled={isLoading}
           onPress={() => console.log("send data to vets here!")}
         />
+
+        <Text
+          style={styles.redirectText}
+          onPress={() => navigation.navigate("LogInScreen")}
+        >
+          Already have an account? Log In
+        </Text>
       </View>
     </ScrollView>
   );

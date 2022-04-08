@@ -1,47 +1,8 @@
-import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Picker,
-} from "react-native";
+import React from "react";
+import { Text } from "react-native";
 
-export default function EmergencyForm() {
-  const [breed, setBreed] = useState("");
-  const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  return (
-    <ScrollView style={styles.formWrapperScroll}>
-      <View style={styles.formWrapper}>
-        <TextInput
-          style={styles.formField}
-          placeholder="Breed"
-          value={breed}
-          onChangeText={(val) => setBreed(val)}
-        />
-        <TextInput
-          style={styles.formField}
-          placeholder="Type Of Emergency"
-          value={typeOfEmergency}
-          onChangeText={(val) => setTypeOfEmergency(val)}
-        />
-
-        <View style={styles.space}></View>
-
-        <Button
-          color="lightblue"
-          title="Request Vet"
-          disabled={isLoading}
-          onPress={() => console.log("send data to vets here!")}
-        />
-      </View>
-    </ScrollView>
-  );
+export default function EmergencyRequests(props) {
+  return <Text>Vets receive requests here!</Text>;
 }
 
 // UI

@@ -1,44 +1,70 @@
-import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Picker,
-} from "react-native";
+import React from "react";
+import { Text, StyleSheet } from "react-native";
 
-export default function EmergencyForm() {
-  const [breed, setBreed] = useState("");
-  const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+export default function EmergencyRequests(props) {
   return (
     <ScrollView style={styles.formWrapperScroll}>
       <View style={styles.formWrapper}>
+        <Picker
+          selectedValue={typeOfUser}
+          onValueChange={(val) => setTypeOfUser(val)}
+          style={styles.picker}
+        >
+          <Picker.Item
+            style={{ fontWeight: "light" }}
+            label="Please select an option"
+            value=""
+          />
+          <Picker.Item label="Horse Owner" value="Horse Owner" />
+          <Picker.Item
+            label="Horse Care Professional"
+            value="Horse Care Professional"
+          />
+        </Picker>
         <TextInput
           style={styles.formField}
-          placeholder="Breed"
-          value={breed}
-          onChangeText={(val) => setBreed(val)}
+          placeholder="Full Name"
+          value={username}
+          onChangeText={(val) => setUsername(val)}
         />
         <TextInput
           style={styles.formField}
-          placeholder="Type Of Emergency"
-          value={typeOfEmergency}
-          onChangeText={(val) => setTypeOfEmergency(val)}
+          placeholder="Email"
+          value={email}
+          onChangeText={(val) => setEmail(val)}
+        />
+        <TextInput
+          style={styles.formField}
+          placeholder="Password"
+          value={password}
+          onChangeText={(val) => setPassword(val)}
+          maxLength={20}
+          secureTextEntry={true}
+        />
+        <TextInput
+          style={styles.formField}
+          placeholder="Password Confirmation"
+          value={passwordConfirm}
+          onChangeText={(val) => setPasswordConfirm(val)}
+          maxLength={20}
+          secureTextEntry={true}
         />
 
         <View style={styles.space}></View>
 
         <Button
           color="lightblue"
-          title="Request Vet"
+          title="Sign Up"
           disabled={isLoading}
-          onPress={() => console.log("send data to vets here!")}
+          onPress={() => handleSignUp()}
         />
+
+        <Text
+          style={styles.redirectText}
+          onPress={() => navigation.navigate("LogInScreen")}
+        >
+          Already have an account? Log In
+        </Text>
       </View>
     </ScrollView>
   );

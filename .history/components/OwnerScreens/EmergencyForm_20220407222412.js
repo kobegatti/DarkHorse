@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React from "react";
 import {
   Alert,
   StyleSheet,
@@ -9,112 +9,8 @@ import {
   Button,
   Picker,
 } from "react-native";
-import { auth, db } from "../config/firebase";
 
-const formValidationFuncs = require("./functions/FormValidation");
-const MAX_ENTRY_LENGTH = 20;
-
-const SignUpScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [typeOfUser, setTypeOfUser] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("CareX");
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const handleDropDown = (val) => {
-    if (val === "Horse Owner" || val === "Horse Care Professional") {
-      setTypeOfUser(val);
-    } else {
-      setTypeOfUser("");
-    }
-    console.log("type =", typeOfUser);
-  };
-
-  const handleSignUp = () => {
-    console.log("handleSignUp");
-    setIsLoading(true);
-    if (
-      username === "" ||
-      email === "" ||
-      password === "" ||
-      passwordConfirm === ""
-    ) {
-      Alert.alert("Missing form entry");
-      setIsLoading(false);
-      return;
-    } else if (typeOfUser === "") {
-      Alert.alert("Must select a dropdown option");
-      setIsLoading(false);
-      setTypeOfUser("");
-      return;
-    } else if (username.length > MAX_ENTRY_LENGTH) {
-      Alert.alert("Username must be 20 characters or less");
-      setUsername("");
-      setIsLoading(false);
-      return;
-    } else if (!formValidationFuncs.validEmail(email)) {
-      Alert.alert("Valid email must contain '@' and '.'");
-      setEmail("");
-      setIsLoading(false);
-      return;
-    } else if (password.length > MAX_ENTRY_LENGTH) {
-      Alert.alert("Password must be 20 characters or less");
-      setPassword("");
-      setIsLoading(false);
-      return;
-    } else if (!formValidationFuncs.validPassword(password)) {
-      Alert.alert("Password must have a number and a special character");
-      setPassword("");
-      setPasswordConfirm("");
-      setIsLoading(false);
-      return;
-    } else if (password !== passwordConfirm) {
-      Alert.alert("Passwords do not match");
-      setPasswordConfirm("");
-      setIsLoading(false);
-      return;
-    }
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        console.log(username);
-        db.collection("Users").doc(userCredentials.user.uid).set({
-          username: username,
-          typeOfUser: typeOfUser,
-          email: email,
-          userImg: null,
-          breeds: [],
-          bio: "",
-          title: "",
-          workPhone: "",
-          workEmail: "",
-          location: "",
-          online: false,
-          user_latitude: null,
-          user_longitude: null,
-        });
-      })
-      .catch((error) => alert(error.message));
-
-    setUsername("");
-    setTypeOfUser("");
-    setEmail("");
-    setPassword("");
-    setPasswordConfirm("");
-    setIsLoading(false);
-  };
-
+export default function EmergencyForm() {
   return (
     <ScrollView style={styles.formWrapperScroll}>
       <View style={styles.formWrapper}>
@@ -181,9 +77,7 @@ const SignUpScreen = ({ navigation }) => {
       </View>
     </ScrollView>
   );
-};
-
-export default SignUpScreen;
+}
 
 // UI
 const styles = StyleSheet.create({

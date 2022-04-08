@@ -35,7 +35,7 @@ export default function EmergencyForm() {
 
         <Button
           color="lightblue"
-          title="Request Vet"
+          title="Get Help"
           disabled={isLoading}
           onPress={() => console.log("send data to vets here!")}
         />
