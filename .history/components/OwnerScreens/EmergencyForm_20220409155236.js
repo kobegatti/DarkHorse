@@ -28,7 +28,6 @@ const EmergencyForm = (props) => {
   const [breeds, setBreeds] = useState([]);
   const [breed, setBreed] = useState("");
   const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [otherEmergency, setOtherEmergency] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -73,8 +72,8 @@ const EmergencyForm = (props) => {
           Type of Emergency
         </Text>
         <Picker
-          selectedValue={typeOfEmergency}
-          onValueChange={(val) => setTypeOfEmergency(val)}
+          selectedValue={breed}
+          onValueChange={(val) => setBreed(val)}
           style={styles.picker}
         >
           {emergencies.map((e, i) => {
@@ -91,9 +90,9 @@ const EmergencyForm = (props) => {
         {typeOfEmergency == "Other" ? (
           <TextInput
             style={styles.formField}
-            placeholder="What kind of emergency?"
-            value={otherEmergency}
-            onChangeText={(val) => setOtherEmergency(val)}
+            placeholder="Other Emergency"
+            value={username}
+            onChangeText={(val) => setTypeOfEmergency(val)}
           ></TextInput>
         ) : (
           <View></View>

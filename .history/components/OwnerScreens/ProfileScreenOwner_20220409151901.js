@@ -30,6 +30,7 @@ const ProfileScreenOwner = (props) => {
   };
 
   useEffect(() => {
+    //console.log("useEffect");
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
@@ -39,9 +40,11 @@ const ProfileScreenOwner = (props) => {
           var ret_arr = [];
           for (var i = 0; i < snapshot.data().breeds.length; i++) {
             ret_arr.push(snapshot.data().breeds[i]);
+            console.log(snapshot.data().breeds[i]);
           }
 
           setBreeds(ret_arr);
+          //console.log("breeds length" + currentUser.breeds.length);
         } else {
           console.log("user does not exist");
         }

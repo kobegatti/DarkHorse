@@ -15,20 +15,10 @@ import { fetchUser, clearData } from "../../redux/actions/index";
 import { connect } from "react-redux";
 
 const EmergencyForm = (props) => {
-  const emergencies = [
-    "Choke",
-    "Colic",
-    "Eye Trauma",
-    "Joints/Tendons/Lameness",
-    "Laceration",
-    "Reproductive",
-    "Other",
-  ];
   const [currentUser, setCurrentUser] = useState(props);
   const [breeds, setBreeds] = useState([]);
   const [breed, setBreed] = useState("");
   const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [otherEmergency, setOtherEmergency] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +30,14 @@ const EmergencyForm = (props) => {
       .then((snapshot) => {
         if (snapshot.exists) {
           setCurrentUser(snapshot.data());
+          var ret_arr = [];
+          for (var i = 0; i < snapshot.data().breeds.length; i++) {
+            ret_arr.push(snapshot.data().breeds[i]);
+            console.log(snapshot.data().breeds[i]);
+          }
+
           setBreeds(snapshot.data().breeds);
+          console.log("breeds = ", breeds);
         } else {
           console.log("user does not exist");
         }
@@ -68,36 +65,18 @@ const EmergencyForm = (props) => {
             );
           })}
         </Picker>
-
-        <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 12 }}>
-          Type of Emergency
-        </Text>
-        <Picker
-          selectedValue={typeOfEmergency}
-          onValueChange={(val) => setTypeOfEmergency(val)}
-          style={styles.picker}
-        >
-          {emergencies.map((e, i) => {
-            return (
-              <Picker.Item
-                style={{ fontWeight: "light" }}
-                label={e}
-                value={e}
-              />
-            );
-          })}
-        </Picker>
-
-        {typeOfEmergency == "Other" ? (
-          <TextInput
-            style={styles.formField}
-            placeholder="What kind of emergency?"
-            value={otherEmergency}
-            onChangeText={(val) => setOtherEmergency(val)}
-          ></TextInput>
-        ) : (
-          <View></View>
-        )}
+        <TextInput
+          style={styles.formField}
+          placeholder="Breed"
+          value={breed}
+          onChangeText={(val) => setBreed(val)}
+        />
+        <TextInput
+          style={styles.formField}
+          placeholder="Type Of Emergency"
+          value={typeOfEmergency}
+          onChangeText={(val) => setTypeOfEmergency(val)}
+        />
 
         <View style={styles.space}></View>
 

@@ -28,7 +28,6 @@ const EmergencyForm = (props) => {
   const [breeds, setBreeds] = useState([]);
   const [breed, setBreed] = useState("");
   const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [otherEmergency, setOtherEmergency] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -88,16 +87,16 @@ const EmergencyForm = (props) => {
           })}
         </Picker>
 
-        {typeOfEmergency == "Other" ? (
+        {/* {typeOfEmergency == "Other" ? (
           <TextInput
             style={styles.formField}
-            placeholder="What kind of emergency?"
-            value={otherEmergency}
-            onChangeText={(val) => setOtherEmergency(val)}
+            placeholder="Other Emergency"
+            value={typeOfEmergency}
+            onChangeText={(val) => setTypeOfEmergency(val)}
           ></TextInput>
         ) : (
           <View></View>
-        )}
+        )} */}
 
         <View style={styles.space}></View>
 

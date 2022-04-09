@@ -15,20 +15,10 @@ import { fetchUser, clearData } from "../../redux/actions/index";
 import { connect } from "react-redux";
 
 const EmergencyForm = (props) => {
-  const emergencies = [
-    "Choke",
-    "Colic",
-    "Eye Trauma",
-    "Joints/Tendons/Lameness",
-    "Laceration",
-    "Reproductive",
-    "Other",
-  ];
   const [currentUser, setCurrentUser] = useState(props);
   const [breeds, setBreeds] = useState([]);
   const [breed, setBreed] = useState("");
   const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [otherEmergency, setOtherEmergency] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -73,31 +63,27 @@ const EmergencyForm = (props) => {
           Type of Emergency
         </Text>
         <Picker
-          selectedValue={typeOfEmergency}
-          onValueChange={(val) => setTypeOfEmergency(val)}
+          selectedValue={breed}
+          onValueChange={(val) => setBreed(val)}
           style={styles.picker}
         >
-          {emergencies.map((e, i) => {
+          {breeds.map((b, i) => {
             return (
               <Picker.Item
                 style={{ fontWeight: "light" }}
-                label={e}
-                value={e}
+                label={b}
+                value={b}
               />
             );
           })}
         </Picker>
 
-        {typeOfEmergency == "Other" ? (
-          <TextInput
-            style={styles.formField}
-            placeholder="What kind of emergency?"
-            value={otherEmergency}
-            onChangeText={(val) => setOtherEmergency(val)}
-          ></TextInput>
-        ) : (
-          <View></View>
-        )}
+        <TextInput
+          style={styles.formField}
+          placeholder="Type Of Emergency"
+          value={typeOfEmergency}
+          onChangeText={(val) => setTypeOfEmergency(val)}
+        />
 
         <View style={styles.space}></View>
 

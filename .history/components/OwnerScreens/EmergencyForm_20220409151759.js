@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -14,90 +14,34 @@ import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 import { connect } from "react-redux";
 
-const EmergencyForm = (props) => {
-  const emergencies = [
-    "Choke",
-    "Colic",
-    "Eye Trauma",
-    "Joints/Tendons/Lameness",
-    "Laceration",
-    "Reproductive",
-    "Other",
-  ];
+export default function EmergencyForm(props) {
   const [currentUser, setCurrentUser] = useState(props);
   const [breeds, setBreeds] = useState([]);
   const [breed, setBreed] = useState("");
   const [typeOfEmergency, setTypeOfEmergency] = useState("");
-  const [otherEmergency, setOtherEmergency] = useState("");
-  const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    console.log("USE EFFECT");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-          setBreeds(snapshot.data().breeds);
-        } else {
-          console.log("user does not exist");
-        }
-      });
-
-    props.navigation.addListener("focus", () => setLoading(!loading));
-  }, [props.navigation, loading]);
 
   return (
     <ScrollView style={styles.formWrapperScroll}>
       <View style={styles.formWrapper}>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>Breed</Text>
+        <Text>Breed</Text>
         <Picker
           selectedValue={breed}
           onValueChange={(val) => setBreed(val)}
           style={styles.picker}
-        >
-          {breeds.map((b, i) => {
-            return (
-              <Picker.Item
-                style={{ fontWeight: "light" }}
-                label={b}
-                value={b}
-              />
-            );
-          })}
-        </Picker>
-
-        <Text style={{ fontWeight: "bold", fontSize: 16, marginTop: 12 }}>
-          Type of Emergency
-        </Text>
-        <Picker
-          selectedValue={typeOfEmergency}
-          onValueChange={(val) => setTypeOfEmergency(val)}
-          style={styles.picker}
-        >
-          {emergencies.map((e, i) => {
-            return (
-              <Picker.Item
-                style={{ fontWeight: "light" }}
-                label={e}
-                value={e}
-              />
-            );
-          })}
-        </Picker>
-
-        {typeOfEmergency == "Other" ? (
-          <TextInput
-            style={styles.formField}
-            placeholder="What kind of emergency?"
-            value={otherEmergency}
-            onChangeText={(val) => setOtherEmergency(val)}
-          ></TextInput>
-        ) : (
-          <View></View>
-        )}
+        ></Picker>
+        <TextInput
+          style={styles.formField}
+          placeholder="Breed"
+          value={breed}
+          onChangeText={(val) => setBreed(val)}
+        />
+        <TextInput
+          style={styles.formField}
+          placeholder="Type Of Emergency"
+          value={typeOfEmergency}
+          onChangeText={(val) => setTypeOfEmergency(val)}
+        />
 
         <View style={styles.space}></View>
 
@@ -110,16 +54,7 @@ const EmergencyForm = (props) => {
       </View>
     </ScrollView>
   );
-};
-
-const mapStateToProps = (store) => ({
-  currentUser: store.userState.currentUser,
-});
-
-const mapDispatchProps = (dispatch) =>
-  bindActionCreators({ fetchUser, clearData }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchProps)(EmergencyForm);
+}
 
 // UI
 const styles = StyleSheet.create({

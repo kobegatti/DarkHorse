@@ -91,7 +91,7 @@ const EmergencyForm = (props) => {
         {typeOfEmergency == "Other" ? (
           <TextInput
             style={styles.formField}
-            placeholder="What kind of emergency?"
+            placeholder="Other Emergency"
             value={otherEmergency}
             onChangeText={(val) => setOtherEmergency(val)}
           ></TextInput>
