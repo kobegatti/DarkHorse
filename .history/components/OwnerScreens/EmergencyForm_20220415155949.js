@@ -54,24 +54,13 @@ const EmergencyForm = (props) => {
         // user has emergencies, check to see if this request is a duplicate
         if (snapshot.exists) {
           snapshot.data().requests.forEach((request) => {
-            if (typeOfEmergency == "Other") {
-              if (
-                breed == request.breed &&
-                otherEmergency == request.typeOfEmergency
-              ) {
-                sameRequest = true;
-              }
-            } else {
-              if (
-                breed == request.breed &&
-                typeOfEmergency == request.typeOfEmergency
-              ) {
-                sameRequest = true;
-              }
+            if (
+              breed == request.breed &&
+              typeOfEmergency == request.typeOfEmergency
+            ) {
+              sameRequest = true;
             }
           });
-
-          console.log(sameRequest);
 
           if (!sameRequest) {
             if (typeOfEmergency == "Other") {
@@ -97,7 +86,6 @@ const EmergencyForm = (props) => {
                   }),
                 });
             }
-            Alert.alert("Your request has been submitted!");
           } else {
             Alert.alert("Duplicate request");
           }

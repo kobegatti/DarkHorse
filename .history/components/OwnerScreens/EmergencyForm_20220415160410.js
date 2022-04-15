@@ -97,7 +97,6 @@ const EmergencyForm = (props) => {
                   }),
                 });
             }
-            Alert.alert("Your request has been submitted!");
           } else {
             Alert.alert("Duplicate request");
           }

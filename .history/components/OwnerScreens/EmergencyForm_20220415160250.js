@@ -57,7 +57,7 @@ const EmergencyForm = (props) => {
             if (typeOfEmergency == "Other") {
               if (
                 breed == request.breed &&
-                otherEmergency == request.typeOfEmergency
+                typeOfEmergency == request.otherEmergency
               ) {
                 sameRequest = true;
               }
@@ -97,7 +97,6 @@ const EmergencyForm = (props) => {
                   }),
                 });
             }
-            Alert.alert("Your request has been submitted!");
           } else {
             Alert.alert("Duplicate request");
           }

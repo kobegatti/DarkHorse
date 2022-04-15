@@ -8,7 +8,6 @@ import { collection } from "firebase/firestore";
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 export default function MapScreen(props) {
-  const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -17,24 +16,24 @@ export default function MapScreen(props) {
   const [isOnline, setIsOnline] = useState(false);
   const [markers, setMarkers] = useState([]);
 
-  // useEffect(() => {
-  //   db.collection("Users")
-  //     .doc(auth.currentUser.uid)
-  //     .get()
-  //     .then((snapshot) => {
-  //       if (snapshot.exists) {
-  //         setCurrentUser(snapshot.data());
-  //         db.collection("Users")
-  //           .doc(auth.currentUser.uid)
-  //           .update({ online: true })
-  //           .then(() => console.log("online now!"));
-  //         // setIsOnline(true);
-  //       } else {
-  //         console.log("user does not exist");
-  //       }
-  //     });
-  //   props.navigation.addListener("focus", () => setLoading(!loading));
-  // }, [props.navigation, loading]);
+  useEffect(() => {
+    db.collection("Users")
+      .doc(auth.currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          setCurrentUser(snapshot.data());
+          db.collection("Users")
+            .doc(auth.currentUser.uid)
+            .update({ online: true })
+            .then(() => console.log("online now!"));
+          setIsOnline(true);
+        } else {
+          console.log("user does not exist");
+        }
+      });
+    props.navigation.addListener("focus", () => setLoading(!loading));
+  }, [props.navigation, loading]);
 
   var online = (
     <MapView.Marker

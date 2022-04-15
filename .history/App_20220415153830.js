@@ -78,6 +78,19 @@ export class App extends Component {
   render() {
     console.log("App executed");
     const { loggedIn, loaded } = this.state;
+    if (!loaded) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            resizeMode={"contain"}
+            style={{ width: imageWidth, height: imageHeight }}
+            source={require("./assets/splash.png")}
+          />
+        </View>
+      );
+    }
 
     if (!loggedIn) {
       return (
@@ -123,7 +136,7 @@ export class App extends Component {
               name="CareXProf"
               component={CareXProf}
               options={{
-                headerTitle: "CareX Professional",
+                headerTitle: "CareX",
                 headerBackTitleVisible: false,
                 headerTitleAlign: "center",
                 headerStyle: {
@@ -135,22 +148,6 @@ export class App extends Component {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      );
-    }
-
-    if (this.state.type == "") {
-      return (
-        <View style={styles.container}>
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <Image
-              resizeMode={"contain"}
-              style={{ width: imageWidth, height: imageHeight }}
-              source={require("./assets/splash.png")}
-            />
-          </View>
-        </View>
       );
     }
 
@@ -202,55 +199,55 @@ export class App extends Component {
           </NavigationContainer>
         </Provider>
       );
-    } else {
-      return (
-        <Provider store={store}>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName="CareX">
-              <Stack.Screen
-                name="CareX"
-                component={CareX}
-                options={{
-                  headerTitle: "CareX",
-                  headerBackTitleVisible: false,
-                  headerTitleAlign: "center",
-                  headerStyle: {
-                    backgroundColor: "#fff",
-                    shadowColor: "#fff",
-                    elevation: 0,
-                  },
-                }}
-              />
-              <Stack.Screen
-                name="EditProfileScreenOwner"
-                component={EditProfileScreenOwner}
-                options={{
-                  headerTitle: "Edit Profile",
-                  headerBackTitleVisible: false,
-                  headerTitleAlign: "center",
-                  headerStyle: {
-                    backgroundColor: "#fff",
-                    shadowColor: "#fff",
-                    elevation: 0,
-                  },
-                }}
-              />
-              <Stack.Screen
-                name="LogInScreen"
-                component={LogInScreen}
-                options={{ title: "Login" }}
-              />
-              <Stack.Screen
-                name="SignUpScreen"
-                component={SignUpScreen}
-                options={{ title: "Sign Up" }}
-              />
-              {/* <Stack.Screen name="LogInScreen" component={LogInScreen} /> */}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </Provider>
-      );
     }
+
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="CareX">
+            <Stack.Screen
+              name="CareX"
+              component={CareX}
+              options={{
+                headerTitle: "CareX",
+                headerBackTitleVisible: false,
+                headerTitleAlign: "center",
+                headerStyle: {
+                  backgroundColor: "#fff",
+                  shadowColor: "#fff",
+                  elevation: 0,
+                },
+              }}
+            />
+            <Stack.Screen
+              name="EditProfileScreenOwner"
+              component={EditProfileScreenOwner}
+              options={{
+                headerTitle: "Edit Profile",
+                headerBackTitleVisible: false,
+                headerTitleAlign: "center",
+                headerStyle: {
+                  backgroundColor: "#fff",
+                  shadowColor: "#fff",
+                  elevation: 0,
+                },
+              }}
+            />
+            <Stack.Screen
+              name="LogInScreen"
+              component={LogInScreen}
+              options={{ title: "Login" }}
+            />
+            <Stack.Screen
+              name="SignUpScreen"
+              component={SignUpScreen}
+              options={{ title: "Sign Up" }}
+            />
+            {/* <Stack.Screen name="LogInScreen" component={LogInScreen} /> */}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
   }
 }
 

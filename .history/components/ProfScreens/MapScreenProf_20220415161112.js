@@ -17,24 +17,24 @@ export default function MapScreen(props) {
   const [isOnline, setIsOnline] = useState(false);
   const [markers, setMarkers] = useState([]);
 
-  // useEffect(() => {
-  //   db.collection("Users")
-  //     .doc(auth.currentUser.uid)
-  //     .get()
-  //     .then((snapshot) => {
-  //       if (snapshot.exists) {
-  //         setCurrentUser(snapshot.data());
-  //         db.collection("Users")
-  //           .doc(auth.currentUser.uid)
-  //           .update({ online: true })
-  //           .then(() => console.log("online now!"));
-  //         // setIsOnline(true);
-  //       } else {
-  //         console.log("user does not exist");
-  //       }
-  //     });
-  //   props.navigation.addListener("focus", () => setLoading(!loading));
-  // }, [props.navigation, loading]);
+  useEffect(() => {
+    db.collection("Users")
+      .doc(auth.currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          setCurrentUser(snapshot.data());
+          db.collection("Users")
+            .doc(auth.currentUser.uid)
+            .update({ online: true })
+            .then(() => console.log("online now!"));
+          setIsOnline(true);
+        } else {
+          console.log("user does not exist");
+        }
+      });
+    props.navigation.addListener("focus", () => setLoading(!loading));
+  }, [props.navigation, loading]);
 
   var online = (
     <MapView.Marker

@@ -78,6 +78,19 @@ export class App extends Component {
   render() {
     console.log("App executed");
     const { loggedIn, loaded } = this.state;
+    // if (!loaded) {
+    //   return (
+    //     <View
+    //       style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    //     >
+    //       <Image
+    //         resizeMode={"contain"}
+    //         style={{ width: imageWidth, height: imageHeight }}
+    //         source={require("./assets/splash.png")}
+    //       />
+    //     </View>
+    //   );
+    // }
 
     if (!loggedIn) {
       return (
@@ -141,6 +154,7 @@ export class App extends Component {
     if (this.state.type == "") {
       return (
         <View style={styles.container}>
+          return (
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
@@ -150,6 +164,7 @@ export class App extends Component {
               source={require("./assets/splash.png")}
             />
           </View>
+          );
         </View>
       );
     }

@@ -35,16 +35,9 @@ const EmergencyForm = (props) => {
 
   async function handleRequest() {
     var sameRequest = false;
+    var user_emergencies = [];
 
-    if (typeOfEmergency == "Other") {
-      console.log("it's other");
-      setTypeOfEmergency(otherEmergency);
-      console.log(typeOfEmergency);
-    }
-    console.log("other emerg = " + otherEmergency);
-    console.log("type = " + typeOfEmergency);
-
-    setOtherEmergency("");
+    console.log("handle request submit here!");
 
     // check if user has emergencies
     db.collection("Emergencies")
@@ -54,52 +47,27 @@ const EmergencyForm = (props) => {
         // user has emergencies, check to see if this request is a duplicate
         if (snapshot.exists) {
           snapshot.data().requests.forEach((request) => {
-            if (typeOfEmergency == "Other") {
-              if (
-                breed == request.breed &&
-                otherEmergency == request.typeOfEmergency
-              ) {
-                sameRequest = true;
-              }
-            } else {
-              if (
-                breed == request.breed &&
-                typeOfEmergency == request.typeOfEmergency
-              ) {
-                sameRequest = true;
-              }
+            if (
+              breed == request.breed &&
+              typeOfEmergency == request.typeOfEmergency
+            ) {
+              sameRequest = true;
             }
           });
 
-          console.log(sameRequest);
-
           if (!sameRequest) {
-            if (typeOfEmergency == "Other") {
-              db.collection("Emergencies")
-                .doc(auth.currentUser.uid)
-                .update({
-                  requests: firebase.firestore.FieldValue.arrayUnion({
-                    breed: breed,
-                    typeOfEmergency: otherEmergency,
-                    accepted: false,
-                    user_id: auth.currentUser.uid,
-                  }),
-                });
-            } else {
-              db.collection("Emergencies")
-                .doc(auth.currentUser.uid)
-                .update({
-                  requests: firebase.firestore.FieldValue.arrayUnion({
-                    breed: breed,
-                    typeOfEmergency: typeOfEmergency,
-                    accepted: false,
-                    user_id: auth.currentUser.uid,
-                  }),
-                });
-            }
-            Alert.alert("Your request has been submitted!");
+            db.collection("Emergencies")
+              .doc(auth.currentUser.uid)
+              .update({
+                requests: firebase.firestore.FieldValue.arrayUnion({
+                  breed: breed,
+                  typeOfEmergency: typeOfEmergency,
+                  accepted: false,
+                  user_id: auth.currentUser.uid,
+                }),
+              });
           } else {
-            Alert.alert("Duplicate request");
+            Alert.alert("This request has been submitted");
           }
           // no current emergencies for user
         } else {
@@ -113,10 +81,10 @@ const EmergencyForm = (props) => {
                 user_id: auth.currentUser.uid,
               }),
             });
-
-          Alert.alert("Your request has been submitted!");
         }
       });
+
+    console.log("same request = " + sameRequest);
     // const usersRef = db.collection("Users");
     // const snapshot = await usersRef.get();
 
@@ -153,7 +121,7 @@ const EmergencyForm = (props) => {
   }
 
   useEffect(() => {
-    //console.log("USE EFFECT");
+    console.log("USE EFFECT");
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
