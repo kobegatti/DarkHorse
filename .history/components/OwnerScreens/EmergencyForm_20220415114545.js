@@ -32,10 +32,10 @@ const EmergencyForm = (props) => {
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [onlineVets, setOnlineVets] = useState([]);
+  const [user_emergencies, setUserEmergencies] = useState([]);
 
   async function handleRequest() {
     var sameRequest = false;
-    var user_emergencies = [];
 
     console.log("handle request submit here!");
 
@@ -48,32 +48,8 @@ const EmergencyForm = (props) => {
         if (snapshot.exists) {
           console.log("EXISTS");
 
-          //setUserEmergencies(snapshot.data().requests);
-          snapshot.data().requests.forEach((request) => {
-            if (
-              breed == request.breed &&
-              typeOfEmergency == request.typeOfEmergency
-            ) {
-              console.log("in if");
-              sameRequest = true;
-              console.log(sameRequest);
-            }
-          });
-
-          if (!sameRequest) {
-            db.collection("Emergencies")
-              .doc(auth.currentUser.uid)
-              .update({
-                requests: firebase.firestore.FieldValue.arrayUnion({
-                  breed: breed,
-                  typeOfEmergency: typeOfEmergency,
-                  accepted: false,
-                  user_id: auth.currentUser.uid,
-                }),
-              });
-          } else {
-            Alert.alert("This request has been submitted");
-          }
+          setUserEmergencies(snapshot.data().requests);
+          console.log(user_emergencies);
           // no current emergencies for user
         } else {
           console.log("NEW");
@@ -92,6 +68,21 @@ const EmergencyForm = (props) => {
       });
 
     console.log("same request = " + sameRequest);
+
+    if (!sameRequest) {
+      db.collection("Emergencies")
+        .doc(auth.currentUser.uid)
+        .update({
+          requests: firebase.firestore.FieldValue.arrayUnion({
+            breed: breed,
+            typeOfEmergency: typeOfEmergency,
+            accepted: false,
+            user_id: auth.currentUser.uid,
+          }),
+        });
+    } else {
+      Alert.alert("This request has been submitted");
+    }
     // const usersRef = db.collection("Users");
     // const snapshot = await usersRef.get();
 

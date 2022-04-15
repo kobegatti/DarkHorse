@@ -58,8 +58,10 @@ const EmergencyForm = (props) => {
               sameRequest = true;
               console.log(sameRequest);
             }
+            // console.log(sameRequest);
+            // console.log(request.breed);
+            // console.log(breed);
           });
-
           if (!sameRequest) {
             db.collection("Emergencies")
               .doc(auth.currentUser.uid)

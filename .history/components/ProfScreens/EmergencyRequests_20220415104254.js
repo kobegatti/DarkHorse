@@ -28,7 +28,7 @@ export default function EmergencyRequests(props) {
         ...[{ breed: r.breed, type: r.typeOfEmergency, accepted: r.accepted }],
       ]);
     });
-    // console.log("components = " + requests[0].breed);
+    console.log("components = " + requests[0].breed);
     //console.log("emergency_data = " + emergency_data);
   }, [props.navigation, loading]);
 

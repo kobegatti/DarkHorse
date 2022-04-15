@@ -34,50 +34,29 @@ const EmergencyForm = (props) => {
   const [onlineVets, setOnlineVets] = useState([]);
 
   async function handleRequest() {
-    var sameRequest = false;
-    var user_emergencies = [];
+    var online_vets = [];
+    var online = false;
 
     console.log("handle request submit here!");
 
-    // check if user has emergencies
+    // send request
     db.collection("Emergencies")
-      .doc(auth.currentUser.uid)
-      .get()
+      .get(auth.currentUser.uid)
       .then((snapshot) => {
-        // user has emergencies, check to see if this request is a duplicate
         if (snapshot.exists) {
           console.log("EXISTS");
-
-          //setUserEmergencies(snapshot.data().requests);
-          snapshot.data().requests.forEach((request) => {
-            if (
-              breed == request.breed &&
-              typeOfEmergency == request.typeOfEmergency
-            ) {
-              console.log("in if");
-              sameRequest = true;
-              console.log(sameRequest);
-            }
-          });
-
-          if (!sameRequest) {
-            db.collection("Emergencies")
-              .doc(auth.currentUser.uid)
-              .update({
-                requests: firebase.firestore.FieldValue.arrayUnion({
-                  breed: breed,
-                  typeOfEmergency: typeOfEmergency,
-                  accepted: false,
-                  user_id: auth.currentUser.uid,
-                }),
-              });
-          } else {
-            Alert.alert("This request has been submitted");
-          }
-          // no current emergencies for user
+          db.collection("Emergencies")
+            .doc(auth.currentUser.uid)
+            .update({
+              requests: firebase.firestore.FieldValue.arrayUnion({
+                breed: breed,
+                typeOfEmergency: typeOfEmergency,
+                accepted: false,
+                user_id: auth.currentUser.uid,
+              }),
+            });
         } else {
-          console.log("NEW");
-          console.log(snapshot.data());
+          console.log("Exists!");
           db.collection("Emergencies")
             .doc(auth.currentUser.uid)
             .set({
@@ -90,8 +69,6 @@ const EmergencyForm = (props) => {
             });
         }
       });
-
-    console.log("same request = " + sameRequest);
     // const usersRef = db.collection("Users");
     // const snapshot = await usersRef.get();
 

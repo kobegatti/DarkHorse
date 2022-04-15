@@ -34,8 +34,8 @@ const EmergencyForm = (props) => {
   const [onlineVets, setOnlineVets] = useState([]);
 
   async function handleRequest() {
+    var emergencies = [];
     var sameRequest = false;
-    var user_emergencies = [];
 
     console.log("handle request submit here!");
 
@@ -47,33 +47,8 @@ const EmergencyForm = (props) => {
         // user has emergencies, check to see if this request is a duplicate
         if (snapshot.exists) {
           console.log("EXISTS");
+          console.log(snapshot.data().requests);
 
-          //setUserEmergencies(snapshot.data().requests);
-          snapshot.data().requests.forEach((request) => {
-            if (
-              breed == request.breed &&
-              typeOfEmergency == request.typeOfEmergency
-            ) {
-              console.log("in if");
-              sameRequest = true;
-              console.log(sameRequest);
-            }
-          });
-
-          if (!sameRequest) {
-            db.collection("Emergencies")
-              .doc(auth.currentUser.uid)
-              .update({
-                requests: firebase.firestore.FieldValue.arrayUnion({
-                  breed: breed,
-                  typeOfEmergency: typeOfEmergency,
-                  accepted: false,
-                  user_id: auth.currentUser.uid,
-                }),
-              });
-          } else {
-            Alert.alert("This request has been submitted");
-          }
           // no current emergencies for user
         } else {
           console.log("NEW");
@@ -92,6 +67,21 @@ const EmergencyForm = (props) => {
       });
 
     console.log("same request = " + sameRequest);
+
+    if (!sameRequest) {
+      db.collection("Emergencies")
+        .doc(auth.currentUser.uid)
+        .update({
+          requests: firebase.firestore.FieldValue.arrayUnion({
+            breed: breed,
+            typeOfEmergency: typeOfEmergency,
+            accepted: false,
+            user_id: auth.currentUser.uid,
+          }),
+        });
+    } else {
+      Alert.alert("This request has been submitted");
+    }
     // const usersRef = db.collection("Users");
     // const snapshot = await usersRef.get();
 

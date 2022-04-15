@@ -34,112 +34,58 @@ const EmergencyForm = (props) => {
   const [onlineVets, setOnlineVets] = useState([]);
 
   async function handleRequest() {
-    var sameRequest = false;
-    var user_emergencies = [];
+    var online_vets = [];
+    var online = false;
 
     console.log("handle request submit here!");
+  //   const usersRef = db.collection("Users");
+  //   const snapshot = await usersRef.get();
 
-    // check if user has emergencies
-    db.collection("Emergencies")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        // user has emergencies, check to see if this request is a duplicate
-        if (snapshot.exists) {
-          console.log("EXISTS");
+  //   snapshot.forEach((doc) => {
+  //     online_vets.push({ id: doc.id, data: doc.data() });
+  //   });
 
-          //setUserEmergencies(snapshot.data().requests);
-          snapshot.data().requests.forEach((request) => {
-            if (
-              breed == request.breed &&
-              typeOfEmergency == request.typeOfEmergency
-            ) {
-              console.log("in if");
-              sameRequest = true;
-              console.log(sameRequest);
-            }
-          });
+  //   online_vets = online_vets.filter((item) => {
+  //     return (
+  //       item.data.typeOfUser == "Horse Care Professional" &&
+  //       item.data.online == online
+  //     );
+  //   });
 
-          if (!sameRequest) {
-            db.collection("Emergencies")
-              .doc(auth.currentUser.uid)
-              .update({
-                requests: firebase.firestore.FieldValue.arrayUnion({
-                  breed: breed,
-                  typeOfEmergency: typeOfEmergency,
-                  accepted: false,
-                  user_id: auth.currentUser.uid,
-                }),
-              });
-          } else {
-            Alert.alert("This request has been submitted");
-          }
-          // no current emergencies for user
-        } else {
-          console.log("NEW");
-          console.log(snapshot.data());
-          db.collection("Emergencies")
-            .doc(auth.currentUser.uid)
-            .set({
-              requests: firebase.firestore.FieldValue.arrayUnion({
-                breed: breed,
-                typeOfEmergency: typeOfEmergency,
-                accepted: false,
-                user_id: auth.currentUser.uid,
-              }),
-            });
-        }
-      });
+  //   if (online_vets.length > 0) {
+  //     online_vets.forEach((vet) => {
+  //       console.log(vet);
+  //       db.collection("Users")
+  //         .doc(vet.id)
+  //         .update({
+  //           requests: firebase.firestore.FieldValue.arrayUnion({
+  //             breed: breed,
+  //             typeOfEmergency: typeOfEmergency,
+  //             accepted: false,
+  //           }),
+  //         })
+  //         .then(console.log("sending request"));
 
-    console.log("same request = " + sameRequest);
-    // const usersRef = db.collection("Users");
-    // const snapshot = await usersRef.get();
+  //       Alert.alert("Request sent!");
+  //     });
+  //   } else {
+  //     Alert.alert("There are no vets online");
+  //   }
+  // }
 
-    // snapshot.forEach((doc) => {
-    //   online_vets.push({ id: doc.id, data: doc.data() });
-    // });
-
-    // online_vets = online_vets.filter((item) => {
-    //   return (
-    //     item.data.typeOfUser == "Horse Care Professional" &&
-    //     item.data.online == online
-    //   );
-    // });
-
-    // if (online_vets.length > 0) {
-    //   online_vets.forEach((vet) => {
-    //     console.log(vet);
-    //     db.collection("Users")
-    //       .doc(vet.id)
-    //       .update({
-    //         requests: firebase.firestore.FieldValue.arrayUnion({
-    //           breed: breed,
-    //           typeOfEmergency: typeOfEmergency,
-    //           accepted: false,
-    //         }),
-    //       })
-    //       .then(console.log("sending request"));
-
-    //     Alert.alert("Request sent!");
-    //   });
-    // } else {
-    //   Alert.alert("There are no vets online");
-    // }
-  }
-
-  useEffect(() => {
-    console.log("USE EFFECT");
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-          setBreeds(snapshot.data().breeds);
-        } else {
-          console.log("user does not exist");
-        }
-      });
+  // useEffect(() => {
+  //   console.log("USE EFFECT");
+  //   db.collection("Users")
+  //     .doc(auth.currentUser.uid)
+  //     .get()
+  //     .then((snapshot) => {
+  //       if (snapshot.exists) {
+  //         setCurrentUser(snapshot.data());
+  //         setBreeds(snapshot.data().breeds);
+  //       } else {
+  //         console.log("user does not exist");
+  //       }
+  //     });
 
     props.navigation.addListener("focus", () => setLoading(!loading));
   }, [props.navigation, loading]);
