@@ -8,10 +8,13 @@ import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+
 
 import ProfileScreenProf from "./ProfileScreenProf";
 import MapScreenProf from "./MapScreenProf";
 import EmergencyRequests from "./EmergencyRequests";
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -41,11 +44,16 @@ export class CareXProf extends Component {
           component={EmergencyRequests}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account-alert"
+              // <MaterialCommunityIcons
+              //   name="account-alert"
+              //   color={color}
+              //   size={26}
+              // ></MaterialCommunityIcons>
+              <FontAwesome5
+                name="hospital-user"
                 color={color}
                 size={26}
-              ></MaterialCommunityIcons>
+              ></FontAwesome5>
             ),
           }}
         />
@@ -55,11 +63,11 @@ export class CareXProf extends Component {
           component={MapScreenProf}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="map-marker"
+              <FontAwesome5
+                name="map-marker-alt"
                 color={color}
                 size={26}
-              ></MaterialCommunityIcons>
+              ></FontAwesome5>
             ),
           }}
         />
@@ -68,11 +76,11 @@ export class CareXProf extends Component {
           component={ProfileScreenProf}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account-circle"
+              <FontAwesome5
+                name="user"
                 color={color}
                 size={26}
-              ></MaterialCommunityIcons>
+              ></FontAwesome5>
             ),
           }}
         />
@@ -80,7 +88,6 @@ export class CareXProf extends Component {
     );
   }
 }
-// {/* <Text>Email: {auth.currentUser?.email}</Text> */}
 
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,

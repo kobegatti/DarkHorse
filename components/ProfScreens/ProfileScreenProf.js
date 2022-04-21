@@ -65,11 +65,13 @@ const ProfileScreenProf = (props) => {
           />
           {currentUser.online ? (
             <Avatar.Image
+              style = {styles.status}
               source={require("../../assets/online.png")}
               size={30}
             />
           ) : (
             <Avatar.Image
+              style = {styles.status}
               source={require("../../assets/offline.png")}
               size={30}
             />
@@ -77,7 +79,7 @@ const ProfileScreenProf = (props) => {
           <View style={{ marginLeft: 20 }}>
             <Title style={(styles.title, { marginTop: 15, marginBottom: 5 })}>
               {currentUser.username}
-            </Title>
+            </Title >
             <Caption style={styles.caption}>{currentUser.typeOfUser}</Caption>
             <View style={{ flexDirection: "row" }}>
               <Caption style={{ flex: 1, flexWrap: "wrap" }}>
@@ -166,6 +168,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  status: {
+    marginTop: 50,
+    position: "absolute"
+  },
   userInfoSection: {
     paddingHorizontal: 30,
     marginBottom: 25,
@@ -173,6 +179,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "Calibri",
   },
   bio: {
     fontSize: 14,

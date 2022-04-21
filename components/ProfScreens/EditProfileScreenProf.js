@@ -97,7 +97,7 @@ const EditProfileScreenProf = (props) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.action}>
+          <View style={styles.fullName}>
             <FontAwesome name="user-o" size={20} />
             <TextInput
               placeholder="Full Name"
@@ -129,6 +129,7 @@ const EditProfileScreenProf = (props) => {
               autoCorrect={false}
               style={styles.textInput}
               value={bio}
+              maxLength={250} // sets the max character limit for Bio
               onChangeText={(val) => setBio(val)}
             />
           </View>
@@ -260,6 +261,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   action: {
+    flexDirection: "row",
+    marginTop: 8,
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 3,
+  },
+  fullName: {
     flexDirection: "row",
     marginTop: 8,
     marginBottom: 8,
