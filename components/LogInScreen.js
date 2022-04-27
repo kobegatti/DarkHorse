@@ -9,9 +9,10 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 
 const LogInScreen = () => {
+  //const [currentUser, setCurrentUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,7 @@ const LogInScreen = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        console.log("what is user = " + user);
         setEmail("");
         setPassword("");
         navigation.navigate("CareX");
@@ -36,6 +38,24 @@ const LogInScreen = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with: ", user.email);
+        console.log("user credentials = " + user.uid);
+
+        db.collection("Users")
+          .doc(user.uid)
+          .get()
+          .then((snapshot) => {
+            if (snapshot.exists) {
+              //console.log(snapshot.data());
+              if (snapshot.data().typeOfUser == "Horse Owner") {
+                console.log("carex navigate");
+                navigation.navigate("CareX");
+              } else {
+                navigation.navigate("CareXProf");
+              }
+            } else {
+              console.log("user does not exist");
+            }
+          });
       })
       .catch((error) => alert(error.message));
     setIsLoading(false);

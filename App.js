@@ -76,6 +76,8 @@ export class App extends Component {
     });
   }
 
+  componentWillUnmount() {}
+
   render() {
     console.log("App executed");
     const { loggedIn, loaded } = this.state;
@@ -155,7 +157,54 @@ export class App extends Component {
       );
     }
 
-    if (this.state.type !== "Horse Owner") {
+    if (this.state.type === "Horse Owner") {
+      return (
+        <Provider store={store}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="CareX">
+              <Stack.Screen
+                name="CareX"
+                component={CareX}
+                options={{
+                  headerTitle: "CareX",
+                  headerBackTitleVisible: false,
+                  headerTitleAlign: "center",
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                    shadowColor: "#fff",
+                    elevation: 0,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="EditProfileScreenOwner"
+                component={EditProfileScreenOwner}
+                options={{
+                  headerTitle: "Edit Profile",
+                  headerBackTitleVisible: false,
+                  headerTitleAlign: "center",
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                    shadowColor: "#fff",
+                    elevation: 0,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="LogInScreen"
+                component={LogInScreen}
+                options={{ title: "Login" }}
+              />
+              <Stack.Screen
+                name="SignUpScreen"
+                component={SignUpScreen}
+                options={{ title: "Sign Up" }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
+      );
+    } else if (this.state.type === "Horse Care Professional") {
       return (
         <Provider store={store}>
           <NavigationContainer>
@@ -164,7 +213,7 @@ export class App extends Component {
                 name="CareXProf"
                 component={CareXProf}
                 options={{
-                  headerTitle: "CareX",
+                  headerTitle: "CareX Professional",
                   headerBackTitleVisible: false,
                   headerTitleAlign: "center",
                   headerStyle: {
@@ -212,58 +261,15 @@ export class App extends Component {
                 component={SignUpScreen}
                 options={{ title: "Sign Up" }}
               />
-              {/* <Stack.Screen name="LogInScreen" component={LogInScreen} /> */}
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>
       );
     } else {
       return (
-        <Provider store={store}>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName="CareX">
-              <Stack.Screen
-                name="CareX"
-                component={CareX}
-                options={{
-                  headerTitle: "CareX",
-                  headerBackTitleVisible: false,
-                  headerTitleAlign: "center",
-                  headerStyle: {
-                    backgroundColor: "#fff",
-                    shadowColor: "#fff",
-                    elevation: 0,
-                  },
-                }}
-              />
-              <Stack.Screen
-                name="EditProfileScreenOwner"
-                component={EditProfileScreenOwner}
-                options={{
-                  headerTitle: "Edit Profile",
-                  headerBackTitleVisible: false,
-                  headerTitleAlign: "center",
-                  headerStyle: {
-                    backgroundColor: "#fff",
-                    shadowColor: "#fff",
-                    elevation: 0,
-                  },
-                }}
-              />
-              <Stack.Screen
-                name="LogInScreen"
-                component={LogInScreen}
-                options={{ title: "Login" }}
-              />
-              <Stack.Screen
-                name="SignUpScreen"
-                component={SignUpScreen}
-                options={{ title: "Sign Up" }}
-              />
-              {/* <Stack.Screen name="LogInScreen" component={LogInScreen} /> */}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </Provider>
+        <View style={styles.loading}>
+          <Text style={{ fontSize: 48 }}>Loading...</Text>
+        </View>
       );
     }
   }
@@ -280,5 +286,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

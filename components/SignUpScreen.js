@@ -106,6 +106,7 @@ const SignUpScreen = ({ navigation }) => {
             user_latitude: null,
             user_longitude: null,
             requests: [],
+            onCall: false,
           });
         })
         .catch((error) => alert(error.message));

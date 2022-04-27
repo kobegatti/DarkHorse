@@ -24,6 +24,7 @@ export class CareX extends Component {
     this.props.clearData();
   }
   handleSignOut = () => {
+    this.props.clearData();
     auth
       .signOut()
       .then(() => {

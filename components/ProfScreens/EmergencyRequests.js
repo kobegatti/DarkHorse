@@ -18,7 +18,12 @@ const EmergencyRequests = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [requests, setRequests] = useState([]);
+  const [streetNumber, setStreetNumber] = useState("");
+  const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
+  const [region, setRegion] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [currentEmergency, setCurrentEmergency] = useState(null);
   const navigation = useNavigation();
 
   const findCity = async (latitude, longitude) => {
@@ -31,7 +36,11 @@ const EmergencyRequests = (props) => {
     place.find((p) => {
       city = p.city;
       console.log(p.city);
+      setStreetNumber(p.streetNumber);
+      setStreet(p.street);
       setCity(p.city);
+      setRegion(p.region);
+      setPostalCode(p.postalCode);
     });
   };
 
@@ -43,6 +52,7 @@ const EmergencyRequests = (props) => {
       .then((snapshot) => {
         if (snapshot.exists) {
           setCurrentUser(snapshot.data());
+          setCurrentEmergency(snapshot.data().emergency);
         } else {
           console.log("user does not exist");
         }
@@ -65,7 +75,11 @@ const EmergencyRequests = (props) => {
           type: doc.data().typeOfEmergency,
           user_id: doc.data().user_id,
           id: doc.id,
+          streetNumber: streetNumber,
+          street: street,
           city: city,
+          region: region,
+          postalCode: postalCode,
           latitude: doc.data().latitude,
           longitude: doc.data().longitude,
         });
@@ -94,6 +108,8 @@ const EmergencyRequests = (props) => {
           type: item.type,
           breed: item.breed,
           city: item.city,
+          latitude: item.latitude,
+          longitude: item.longitude,
         })
       }
       style={[styles.item, backgroundColor]}
@@ -110,6 +126,28 @@ const EmergencyRequests = (props) => {
     );
   };
 
+  // if (currentEmergency) {
+  //   return (
+  //     <SafeAreaView style={styles.listContainer}>
+  //       <Text style={styles.title}>Current Emergency</Text>
+  //       <Text style={styles.title}>{JSON.stringify(currentEmergency)}</Text>
+  //     </SafeAreaView>
+  //   );
+  // } else {
+  //   return (
+  //     <SafeAreaView style={styles.listContainer}>
+  //       <Text style={styles.title}>Emergencies</Text>
+  //       <FlatList
+  //         data={requests}
+  //         renderItem={renderRequest}
+  //         keyExtractor={(item) => item.id}
+  //         ItemSeparatorComponent={listSeparator}
+  //       />
+  //       <Text>{JSON.stringify(currentEmergency)}</Text>
+  //     </SafeAreaView>
+  //   );
+  // }
+
   return (
     <SafeAreaView style={styles.listContainer}>
       <Text style={styles.title}>Emergencies</Text>
@@ -119,6 +157,7 @@ const EmergencyRequests = (props) => {
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={listSeparator}
       />
+      <Text>{JSON.stringify(currentEmergency)}</Text>
     </SafeAreaView>
   );
 };

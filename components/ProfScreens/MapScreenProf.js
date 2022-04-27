@@ -90,7 +90,9 @@ export default function MapScreen(props) {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: false,
+      });
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
