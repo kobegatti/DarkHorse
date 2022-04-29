@@ -12,21 +12,19 @@ import { fetchUser, clearData } from "../../redux/actions/index";
 
 import { auth, db } from "../../config/firebase";
 import { connect } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const RequestInfo = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [type, setType] = useState("");
   const [breed, setBreed] = useState("");
-  const [streetNumber, setStreetNumber] = useState("");
-  const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
-  const [region, setRegion] = useState("");
-  const [postalCode, setPostalCode] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const navigation = useNavigation();
 
-  const handleAccept = (props) => {
+  const handleAccept = () => {
     console.log("Accept button pushed");
 
     // Set onCall to true, submit emergency
@@ -37,15 +35,20 @@ const RequestInfo = (props) => {
         emergency: {
           type: type,
           breed: breed,
-          streetNumber: streetNumber,
-          street: street,
           city: city,
-          region: region,
-          postalCode: postalCode,
           latitude: latitude,
           longitude: longitude,
         },
-      });
+      })
+      .then(
+        props.navigation.navigate("MapScreenProf", {
+          target_latitude: latitude,
+          target_longitude: longitude,
+        })
+      );
+
+    // Navigate to map screen with new location data
+    // props.navigation.navigate("MapScreenProf");
   };
 
   useEffect(() => {
@@ -62,11 +65,7 @@ const RequestInfo = (props) => {
 
     setType(props.route.params.type);
     setBreed(props.route.params.breed);
-    setStreetNumber(props.route.params.streetNumber);
-    setStreet(props.route.params.street);
     setCity(props.route.params.city);
-    setRegion(props.route.params.region);
-    setPostalCode(props.route.params.postalCode);
     setLatitude(props.route.params.latitude);
     setLongitude(props.route.params.longitude);
 
@@ -84,6 +83,7 @@ const RequestInfo = (props) => {
         <Text style={styles.text_content}>{city}</Text>
         <Text>{latitude}</Text>
         <Text>{longitude}</Text>
+        {/* <Text>{JSON.stringify(props)}</Text> */}
       </SafeAreaView>
       <TouchableOpacity
         style={styles.commandButton}

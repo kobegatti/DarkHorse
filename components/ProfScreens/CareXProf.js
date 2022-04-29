@@ -53,7 +53,7 @@ export class CareXProf extends Component {
         />
 
         <Tab.Screen
-          name="Map"
+          name="MapScreenProf"
           component={MapScreenProf}
           options={{
             tabBarIcon: ({ color, size }) => (

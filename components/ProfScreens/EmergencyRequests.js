@@ -24,7 +24,6 @@ const EmergencyRequests = (props) => {
   const [region, setRegion] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [currentEmergency, setCurrentEmergency] = useState(null);
-  const navigation = useNavigation();
 
   const findCity = async (latitude, longitude) => {
     const place = await Location.reverseGeocodeAsync({
@@ -36,6 +35,7 @@ const EmergencyRequests = (props) => {
     place.find((p) => {
       city = p.city;
       console.log(p.city);
+      console.log("streetNumber = " + p.streetNumber);
       setStreetNumber(p.streetNumber);
       setStreet(p.street);
       setCity(p.city);
@@ -62,7 +62,7 @@ const EmergencyRequests = (props) => {
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({ online: true })
-      .then(() => console.log("offline now!"));
+      .then(() => console.log("online now!"));
 
     // Get Emergencies
     db.collection("Emergencies").onSnapshot((snapshot) => {
@@ -126,40 +126,52 @@ const EmergencyRequests = (props) => {
     );
   };
 
-  // if (currentEmergency) {
-  //   return (
-  //     <SafeAreaView style={styles.listContainer}>
-  //       <Text style={styles.title}>Current Emergency</Text>
-  //       <Text style={styles.title}>{JSON.stringify(currentEmergency)}</Text>
-  //     </SafeAreaView>
-  //   );
-  // } else {
-  //   return (
-  //     <SafeAreaView style={styles.listContainer}>
-  //       <Text style={styles.title}>Emergencies</Text>
-  //       <FlatList
-  //         data={requests}
-  //         renderItem={renderRequest}
-  //         keyExtractor={(item) => item.id}
-  //         ItemSeparatorComponent={listSeparator}
-  //       />
-  //       <Text>{JSON.stringify(currentEmergency)}</Text>
-  //     </SafeAreaView>
-  //   );
-  // }
+  if (currentEmergency) {
+    return (
+      <SafeAreaView>
+        <Text style={styles.emergency_title}>Current Emergency</Text>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => props.navigation.navigate("MapScreenProf")}
+        >
+          {/* <Text style={styles.title}>{JSON.stringify(currentEmergency)}</Text> */}
+          <Text style={styles.text_title}>Type</Text>
+          <Text style={styles.text_content}>{currentEmergency.type}</Text>
+          <Text style={styles.text_title}>Breed</Text>
+          <Text style={styles.text_content}>{currentEmergency.breed}</Text>
+          <Text style={styles.text_title}>Location</Text>
+          <Text style={styles.text_content}>{currentEmergency.city}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.listContainer}>
+        <Text style={styles.title}>Emergencies</Text>
+        <FlatList
+          data={requests}
+          renderItem={renderRequest}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={listSeparator}
+        />
+        <Text>{JSON.stringify(currentEmergency)}</Text>
+      </SafeAreaView>
+    );
+  }
 
-  return (
-    <SafeAreaView style={styles.listContainer}>
-      <Text style={styles.title}>Emergencies</Text>
-      <FlatList
-        data={requests}
-        renderItem={renderRequest}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={listSeparator}
-      />
-      <Text>{JSON.stringify(currentEmergency)}</Text>
-    </SafeAreaView>
-  );
+  // return (
+  //   <SafeAreaView style={styles.listContainer}>
+  //     <Text style={styles.title}>Emergencies</Text>
+  //     <FlatList
+  //       data={requests}
+  //       renderItem={renderRequest}
+  //       keyExtractor={(item) => item.id}
+  //       ItemSeparatorComponent={listSeparator}
+  //     />
+  //     <Text>{JSON.stringify(currentEmergency)}</Text>
+  //     <Text>{JSON.stringify(currentUser.onCall)}</Text>
+  //   </SafeAreaView>
+  // );
 };
 
 const mapStateToProps = (store) => ({
@@ -174,6 +186,14 @@ export default connect(mapStateToProps, mapDispatchProps)(EmergencyRequests);
 
 // UI
 const styles = StyleSheet.create({
+  box: {
+    alignItems: "center",
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 8,
+    color: "#666",
+    backgroundColor: "lightblue",
+  },
   container: {
     flex: 1,
   },
@@ -200,12 +220,27 @@ const styles = StyleSheet.create({
     color: "navy",
     textAlign: "center",
   },
+  emergency_title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "maroon",
+    textAlign: "center",
+  },
   section: {
     flex: 1,
     alignItems: "center",
     paddingHorizontal: 0,
     paddingTop: 10,
     marginBottom: 25,
+  },
+  text_title: {
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "navy",
+  },
+  text_content: {
+    fontSize: 24,
+    marginBottom: 13,
   },
   picker: {
     flex: 1,

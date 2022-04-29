@@ -4,18 +4,26 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import { Button, Image } from "react-native-paper";
 import { auth, db } from "../../config/firebase";
-import { collection } from "firebase/firestore";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
-export default function MapScreen(props) {
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  fetchUser,
+  clearData,
+  fetchEmergencies,
+} from "../../redux/actions/index";
+
+const MapScreenProf = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [isOnline, setIsOnline] = useState(false);
-  const [markers, setMarkers] = useState([]);
+  const [isOnline, setIsOnline] = useState(true);
+  const [onCall, setOnCall] = useState(false);
+  const [targetLatitude, setTargetLatitude] = useState(null);
+  const [targetLongitude, setTargetLongitude] = useState(null);
 
   var online = (
     <MapView.Marker
@@ -25,25 +33,7 @@ export default function MapScreen(props) {
       }}
       title={"Stop"}
       description={"Online/Offline Status"}
-      pinColor={"green"}
-      onPress={() => updateAvailability()}
-    >
-      <MapView.Callout>
-        <View>
-          <Text>GO</Text>
-        </View>
-      </MapView.Callout>
-    </MapView.Marker>
-  );
-
-  var online2 = (
-    <MapView.Marker
-      coordinate={{
-        latitude: 35.3,
-        longitude: -120.65,
-      }}
-      title={"Stop"}
-      pinColor={"blue"}
+      pinColor={isOnline ? "green" : "red"}
       onPress={() => updateAvailability()}
     >
       <MapView.Callout>
@@ -71,6 +61,18 @@ export default function MapScreen(props) {
         </View>
       </MapView.Callout>
     </MapView.Marker>
+  );
+
+  var target = (
+    <MapView.Marker
+      coordinate={{
+        latitude: targetLatitude ? targetLatitude : 0,
+        longitude: targetLongitude ? targetLongitude : 0,
+      }}
+      title={"Target"}
+      pinColor={"red"}
+      onPress={() => console.log("Hey")}
+    ></MapView.Marker>
   );
 
   function updateAvailability() {
@@ -104,6 +106,9 @@ export default function MapScreen(props) {
         .then((snapshot) => {
           if (snapshot.exists) {
             setIsOnline(snapshot.data().online);
+            setOnCall(snapshot.data().onCall);
+            setTargetLatitude(snapshot.data().emergency.latitude);
+            setTargetLongitude(snapshot.data().emergency.longitude);
           } else {
             console.log("No such document!");
           }
@@ -114,15 +119,8 @@ export default function MapScreen(props) {
         .doc(auth.currentUser.uid)
         .update({ user_latitude: latitude, user_longitude: longitude })
         .then(console.log("location updated!"));
-
-      // find online vets
-      const usersRef = db.collection("Users");
-      const snapshot = await usersRef.get();
-      snapshot.forEach((doc) => {
-        //console.log(doc.id, "=>", doc.data());
-      });
     })();
-  }, [latitude, longitude]);
+  }, [latitude, longitude, targetLatitude, targetLongitude]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -139,24 +137,55 @@ export default function MapScreen(props) {
     );
   }
 
-  return (
-    <MapView
-      showsUserLocation
-      zoomEnabled
-      style={{ flex: 1 }}
-      initialRegion={{
-        latitude: latitude, //latitude
-        longitude: longitude, //longitude
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-    >
-      {isOnline ? online : offline}
+  if (!targetLatitude || !targetLatitude) {
+    return (
+      <MapView
+        showsUserLocation
+        zoomEnabled
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: latitude, //latitude
+          longitude: longitude, //longitude
+          // latitudeDelta: 0.0922,
+          // longitudeDelta: 0.0421,
+          latitudeDelta: 0.122,
+          longitudeDelta: 0.0821,
+        }}
+      >
+        {isOnline ? online : offline}
+      </MapView>
+    );
+  } else {
+    return (
+      <MapView
+        showsUserLocation
+        zoomEnabled
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: latitude, //latitude
+          longitude: longitude, //longitude
+          // latitudeDelta: 0.0922,
+          // longitudeDelta: 0.0421,
+          latitudeDelta: 0.122,
+          longitudeDelta: 0.0821,
+        }}
+      >
+        {isOnline ? online : offline}
+        {target}
+      </MapView>
+    );
+  }
+};
 
-      {online2}
-    </MapView>
-  );
-}
+const mapStateToProps = (store) => ({
+  currentUser: store.userState.currentUser,
+  emergencies: store.emergencyState.emergencies,
+});
+
+const mapDispatchProps = (dispatch) =>
+  bindActionCreators({ fetchUser, clearData, fetchEmergencies }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchProps)(MapScreenProf);
 
 const styles = StyleSheet.create({
   container: {
