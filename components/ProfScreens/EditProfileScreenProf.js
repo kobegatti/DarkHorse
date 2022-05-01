@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { createRef, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
+import BottomSheet from "reanimated-bottom-sheet";
+import Animated from "react-native-reanimated";
 import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 
@@ -19,38 +21,16 @@ import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
 const EditProfileScreenProf = (props) => {
-  const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(props);
-  const [username, setUsername] = useState("");
-  const [title, setTitle] = useState("");
-  const [bio, setBio] = useState("");
-  const [location, setLocation] = useState("");
-  const [workPhone, setWorkPhone] = useState("");
-  const [workEmail, setWorkEmail] = useState("");
+  const { currentUser } = props;
+  const [username, setUsername] = useState(currentUser.username);
+  const [title, setTitle] = useState(currentUser.title);
+  const [bio, setBio] = useState(currentUser.bio);
+  const [location, setLocation] = useState(currentUser.location);
+  const [workPhone, setWorkPhone] = useState(currentUser.workPhone);
+  const [workEmail, setWorkEmail] = useState(currentUser.workEmail);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-          //console.log(snapshot.data());
-          setUsername(snapshot.data().username);
-          setTitle(snapshot.data().title);
-          setBio(snapshot.data().bio);
-          setLocation(snapshot.data().location);
-          setWorkPhone(snapshot.data().workPhone);
-          setWorkEmail(snapshot.data().workEmail);
-        } else {
-          console.log("user does not exist");
-        }
-      });
-    props.navigation.addListener("focus", () => setLoading(!loading));
-  }, [props.navigation, loading]);
-
-  const handleUpdate = (props) => {
+  const handleUpdate = async (props) => {
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({
@@ -117,7 +97,7 @@ const EditProfileScreenProf = (props) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.action}>
+          <View style={styles.fullName}>
             <FontAwesome name="user-o" size={20} />
             <TextInput
               placeholder="Full Name"
@@ -149,6 +129,7 @@ const EditProfileScreenProf = (props) => {
               autoCorrect={false}
               style={styles.textInput}
               value={bio}
+              maxLength={250} // sets the max character limit for Bio
               onChangeText={(val) => setBio(val)}
             />
           </View>
@@ -280,6 +261,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   action: {
+    flexDirection: "row",
+    marginTop: 8,
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 3,
+  },
+  fullName: {
     flexDirection: "row",
     marginTop: 8,
     marginBottom: 8,
