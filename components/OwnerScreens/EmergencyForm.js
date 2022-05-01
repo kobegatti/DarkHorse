@@ -33,6 +33,20 @@ const EmergencyForm = (props) => {
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const findCity = async (latitude, longitude) => {
+    const place = await Location.reverseGeocodeAsync({
+      latitude: latitude,
+      longitude: longitude,
+    });
+
+    let city;
+    place.find((p) => {
+      city = p.city;
+      console.log(p.city);
+      setCity(p.city);
+    });
+  };
+
   function handleRequest() {
     var sameRequest = false;
 
@@ -60,11 +74,11 @@ const EmergencyForm = (props) => {
             }
           } else {
             console.log("regular emergency");
-            console.log(breed + " = " + request.data().breed);
-            console.log(
-              typeOfEmergency + " = " + request.data().typeOfEmergency
-            );
-            console.log(auth.currentUser.uid + " = " + request.data().user_id);
+            // console.log(breed + " = " + request.data().breed);
+            // console.log(
+            //   typeOfEmergency + " = " + request.data().typeOfEmergency
+            // );
+            // console.log(auth.currentUser.uid + " = " + request.data().user_id);
             if (
               breed == request.data().breed &&
               typeOfEmergency == request.data().typeOfEmergency &&
@@ -78,7 +92,9 @@ const EmergencyForm = (props) => {
         if (sameRequest) {
           Alert.alert("This is a duplicate request");
         } else {
-          db.collection("Emergencies").doc().set({
+          var newEmergencyRef = db.collection("Emergencies").doc();
+          var newEmergencyRefID = newEmergencyRef.id;
+          newEmergencyRef.set({
             breed: breed,
             typeOfEmergency: typeOfEmergency,
             accepted: false,
@@ -86,8 +102,33 @@ const EmergencyForm = (props) => {
             latitude: currentUser.user_latitude,
             longitude: currentUser.user_longitude,
           });
+
+          db.collection("Users")
+            .doc(auth.currentUser.uid)
+            .update({
+              emergencies: firebase.firestore.FieldValue.arrayUnion({
+                type: typeOfEmergency,
+                breed: breed,
+                accepted: false,
+                emergency_id: newEmergencyRefID,
+                vet_id: "",
+              }),
+            });
+
+          // db.collection("Users")
+          //   .doc(auth.currentUser.uid)
+          //   .update({
+          //     emergencies: firebase.firestore.FieldValue.arrayUnion({
+          //       type: typeOfEmergency,
+          //       breed: breed,
+          //       city: city,
+          //     }),
+          //   });
+
           Alert.alert("Your request has been submitted!");
         }
+
+        props.navigation.navigate("MyRequests");
       });
   }
 

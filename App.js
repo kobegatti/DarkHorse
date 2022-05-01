@@ -31,6 +31,7 @@ import CareX from "./components/OwnerScreens/CareX";
 import { Dimensions } from "react-native";
 import { user } from "./redux/reducers/user";
 import CareXProf from "./components/ProfScreens/CareXProf";
+import EmergencyInfo from "./components/OwnerScreens/EmergencyInfo";
 
 const dimensions = Dimensions.get("window");
 const imageHeight = (dimensions.height * 9) / 16;
@@ -181,6 +182,20 @@ export class App extends Component {
                 component={EditProfileScreenOwner}
                 options={{
                   headerTitle: "Edit Profile",
+                  headerBackTitleVisible: false,
+                  headerTitleAlign: "center",
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                    shadowColor: "#fff",
+                    elevation: 0,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="EmergencyInfo"
+                component={EmergencyInfo}
+                options={{
+                  headerTitle: "Emergency Info",
                   headerBackTitleVisible: false,
                   headerTitleAlign: "center",
                   headerStyle: {

@@ -12,7 +12,7 @@ import { fetchUser, clearData } from "../../redux/actions/index";
 
 import { auth, db } from "../../config/firebase";
 import { connect } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import firebase from "firebase";
 
 const RequestInfo = (props) => {
   const [loading, setLoading] = useState(true);
@@ -22,11 +22,54 @@ const RequestInfo = (props) => {
   const [city, setCity] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const navigation = useNavigation();
+  const [ownerID, setOwnerID] = useState("");
+  const [emergencyID, setEmergencyId] = useState("");
+  const [vetID, setVetId] = useState("");
 
   const handleAccept = () => {
-    console.log("Accept button pushed");
+    // Update owner emergency info
+    const obj = {
+      type: type,
+      breed: breed,
+      accepted: false,
+      emergency_id: emergencyID,
+      vet_id: "",
+    };
+    db.collection("Users")
+      .doc(ownerID)
+      .update({
+        emergencies: firebase.firestore.FieldValue.arrayRemove(obj),
+      });
 
+    db.collection("Users")
+      .doc(ownerID)
+      .update({
+        emergencies: firebase.firestore.FieldValue.arrayUnion({
+          type: type,
+          breed: breed,
+          emergency_id: emergencyID,
+          accepted: true,
+          vet_id: auth.currentUser.uid,
+        }),
+      });
+
+    db.collection("Users")
+      .doc(ownerID)
+      .get()
+      .then((snapshot) => {
+        snapshot.data().emergencies.forEach((e) => {
+          if (e.emergency_id == emergencyID) {
+            console.log(e);
+            e.accepted = true;
+            console.log(e);
+          }
+        });
+      });
+
+    // delete Emergency
+    db.collection("Emergencies").doc(emergencyID).delete();
+
+    // Vets
     // Set onCall to true, submit emergency
     db.collection("Users")
       .doc(auth.currentUser.uid)
@@ -46,9 +89,6 @@ const RequestInfo = (props) => {
           target_longitude: longitude,
         })
       );
-
-    // Navigate to map screen with new location data
-    // props.navigation.navigate("MapScreenProf");
   };
 
   useEffect(() => {
@@ -68,6 +108,9 @@ const RequestInfo = (props) => {
     setCity(props.route.params.city);
     setLatitude(props.route.params.latitude);
     setLongitude(props.route.params.longitude);
+    setOwnerID(props.route.params.user_id);
+    setEmergencyId(props.route.params.emergency_id);
+    setVetId(props.route.params.vet_id);
 
     props.navigation.addListener("focus", () => setLoading(!loading));
   }, [props.navigation, loading]);
@@ -81,8 +124,8 @@ const RequestInfo = (props) => {
         <Text style={styles.text_content}>{breed}</Text>
         <Text style={styles.text_title}>Location</Text>
         <Text style={styles.text_content}>{city}</Text>
-        <Text>{latitude}</Text>
-        <Text>{longitude}</Text>
+        <Text>{"user ID = " + ownerID}</Text>
+        <Text>{"emergencyID = " + emergencyID}</Text>
         {/* <Text>{JSON.stringify(props)}</Text> */}
       </SafeAreaView>
       <TouchableOpacity

@@ -12,6 +12,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import ProfileScreenOwner from "./ProfileScreenOwner";
 import MapScreenOwner from "./MapScreenOwner";
 import EmergencyForm from "./EmergencyForm";
+import MyRequests from "./MyRequests";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -44,6 +45,20 @@ export class CareX extends Component {
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="account-alert"
+                color={color}
+                size={26}
+              ></MaterialCommunityIcons>
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="MyRequests"
+          component={MyRequests}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="calendar-arrow-right"
                 color={color}
                 size={26}
               ></MaterialCommunityIcons>

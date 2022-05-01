@@ -18,13 +18,11 @@ const EmergencyRequests = (props) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [requests, setRequests] = useState([]);
-  const [streetNumber, setStreetNumber] = useState("");
-  const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
-  const [region, setRegion] = useState("");
-  const [postalCode, setPostalCode] = useState("");
   const [currentEmergency, setCurrentEmergency] = useState(null);
+  const [onCall, setOnCall] = useState(null);
 
+  // location info
   const findCity = async (latitude, longitude) => {
     const place = await Location.reverseGeocodeAsync({
       latitude: latitude,
@@ -35,12 +33,7 @@ const EmergencyRequests = (props) => {
     place.find((p) => {
       city = p.city;
       console.log(p.city);
-      console.log("streetNumber = " + p.streetNumber);
-      setStreetNumber(p.streetNumber);
-      setStreet(p.street);
       setCity(p.city);
-      setRegion(p.region);
-      setPostalCode(p.postalCode);
     });
   };
 
@@ -53,6 +46,7 @@ const EmergencyRequests = (props) => {
         if (snapshot.exists) {
           setCurrentUser(snapshot.data());
           setCurrentEmergency(snapshot.data().emergency);
+          setOnCall(snapshot.data().onCall);
         } else {
           console.log("user does not exist");
         }
@@ -69,17 +63,16 @@ const EmergencyRequests = (props) => {
       const emergencies = [];
       snapshot.forEach((doc) => {
         findCity(doc.data().latitude, doc.data().longitude);
+        // setUserID(doc.data().user_id);
+        // setEmergencyId(doc.id);
         emergencies.push({
           accepted: doc.data().accepted,
           breed: doc.data().breed,
           type: doc.data().typeOfEmergency,
           user_id: doc.data().user_id,
           id: doc.id,
-          streetNumber: streetNumber,
-          street: street,
+          vet_id: doc.data().vet_id,
           city: city,
-          region: region,
-          postalCode: postalCode,
           latitude: doc.data().latitude,
           longitude: doc.data().longitude,
         });
@@ -110,6 +103,9 @@ const EmergencyRequests = (props) => {
           city: item.city,
           latitude: item.latitude,
           longitude: item.longitude,
+          user_id: item.user_id,
+          emergency_id: item.id,
+          vet_id: item.vet_id,
         })
       }
       style={[styles.item, backgroundColor]}
@@ -126,10 +122,10 @@ const EmergencyRequests = (props) => {
     );
   };
 
-  if (currentEmergency) {
+  if (onCall) {
     return (
       <SafeAreaView>
-        <Text style={styles.emergency_title}>Current Emergency</Text>
+        <Text style={styles.emergency_title}>Accepted Emergency</Text>
         <TouchableOpacity
           style={styles.box}
           onPress={() => props.navigation.navigate("MapScreenProf")}
@@ -141,23 +137,24 @@ const EmergencyRequests = (props) => {
           <Text style={styles.text_content}>{currentEmergency.breed}</Text>
           <Text style={styles.text_title}>Location</Text>
           <Text style={styles.text_content}>{currentEmergency.city}</Text>
+          {/* <Text style={styles.text_content}>{userID}</Text> */}
         </TouchableOpacity>
       </SafeAreaView>
     );
-  } else {
-    return (
-      <SafeAreaView style={styles.listContainer}>
-        <Text style={styles.title}>Emergencies</Text>
-        <FlatList
-          data={requests}
-          renderItem={renderRequest}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={listSeparator}
-        />
-        <Text>{JSON.stringify(currentEmergency)}</Text>
-      </SafeAreaView>
-    );
   }
+
+  return (
+    <SafeAreaView style={styles.listContainer}>
+      <Text style={styles.title}>Available Emergencies</Text>
+      <FlatList
+        data={requests}
+        renderItem={renderRequest}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={listSeparator}
+      />
+      {/* <Text>{JSON.stringify(currentEmergency)}</Text> */}
+    </SafeAreaView>
+  );
 
   // return (
   //   <SafeAreaView style={styles.listContainer}>

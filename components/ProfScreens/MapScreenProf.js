@@ -109,6 +109,7 @@ const MapScreenProf = (props) => {
             setOnCall(snapshot.data().onCall);
             setTargetLatitude(snapshot.data().emergency.latitude);
             setTargetLongitude(snapshot.data().emergency.longitude);
+            setOnCall(snapshot.data().onCall);
           } else {
             console.log("No such document!");
           }
@@ -120,7 +121,9 @@ const MapScreenProf = (props) => {
         .update({ user_latitude: latitude, user_longitude: longitude })
         .then(console.log("location updated!"));
     })();
-  }, [latitude, longitude, targetLatitude, targetLongitude]);
+
+    props.navigation.addListener("focus", () => setLoading(!loading));
+  }, [props.navigation, latitude, longitude, targetLatitude, targetLongitude]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -137,7 +140,7 @@ const MapScreenProf = (props) => {
     );
   }
 
-  if (!targetLatitude || !targetLatitude) {
+  if (!onCall) {
     return (
       <MapView
         showsUserLocation
@@ -162,12 +165,12 @@ const MapScreenProf = (props) => {
         zoomEnabled
         style={{ flex: 1 }}
         initialRegion={{
-          latitude: latitude, //latitude
-          longitude: longitude, //longitude
+          latitude: targetLatitude, //latitude
+          longitude: targetLongitude, //longitude
           // latitudeDelta: 0.0922,
           // longitudeDelta: 0.0421,
-          latitudeDelta: 0.122,
-          longitudeDelta: 0.0821,
+          latitudeDelta: 0.222,
+          longitudeDelta: 0.121,
         }}
       >
         {isOnline ? online : offline}

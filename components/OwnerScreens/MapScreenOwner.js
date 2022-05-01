@@ -8,12 +8,15 @@ import { collection } from "firebase/firestore";
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 export default function MapScreenOwner(props) {
+  const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(props);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [markers, setMarkers] = useState([]);
+  const [vetLatitude, setVetLatitude] = useState(null);
+  const [vetLongitude, setVetLongitude] = useState(null);
+  const [vetID, setVetId] = useState("");
 
   var current_location = (
     <MapView.Marker
@@ -26,11 +29,11 @@ export default function MapScreenOwner(props) {
     ></MapView.Marker>
   );
 
-  var online2 = (
+  var vet_location = (
     <MapView.Marker
       coordinate={{
-        latitude: 35.3,
-        longitude: -120.65,
+        latitude: vetLatitude ? vetLatitude : 0,
+        longitude: vetLongitude ? vetLongitude : 0,
       }}
       title={"Stop"}
       pinColor={"blue"}
@@ -63,7 +66,22 @@ export default function MapScreenOwner(props) {
         .get()
         .then((snapshot) => {
           if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
+            // setIsOnline(snapshot.data().online);
+            setVetId(snapshot.data().emergencies[0].vet_id);
+            console.log("vet_id = " + snapshot.data().emergencies[0].vet_id);
+          } else {
+            console.log("No such document!");
+          }
+        });
+
+      // get accepted vet location
+      db.collection("Users")
+        .doc(vetID)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            setVetLatitude(snapshot.data().user_latitude);
+            setVetLongitude(snapshot.data().user_longitude);
           } else {
             console.log("No such document!");
           }
@@ -81,8 +99,9 @@ export default function MapScreenOwner(props) {
       // snapshot.forEach((doc) => {
       //   //console.log(doc.id, "=>", doc.data());
       // });
+      props.navigation.addListener("focus", () => setLoading(!loading));
     })();
-  }, [latitude, longitude]);
+  }, [latitude, longitude, vetLatitude, vetLongitude]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -99,6 +118,26 @@ export default function MapScreenOwner(props) {
     );
   }
 
+  if (!vetLatitude || !vetLongitude) {
+    return (
+      <MapView
+        showsUserLocation
+        zoomEnabled
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: latitude, //latitude
+          longitude: longitude, //longitude
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        {current_location}
+
+        {/* {online2} */}
+      </MapView>
+    );
+  }
+
   return (
     <MapView
       showsUserLocation
@@ -112,8 +151,7 @@ export default function MapScreenOwner(props) {
       }}
     >
       {current_location}
-
-      {online2}
+      {vet_location}
     </MapView>
   );
 }
