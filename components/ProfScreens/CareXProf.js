@@ -36,7 +36,7 @@ export class CareXProf extends Component {
   render() {
     // const { currentUser } = this.props;
     return (
-      <Tab.Navigator initialRouteName="Map" labeled={false}>
+      <Tab.Navigator initialRouteName="EmergencyRequests" labeled={false}>
         <Tab.Screen
           name="EmergencyRequests"
           component={EmergencyRequests}

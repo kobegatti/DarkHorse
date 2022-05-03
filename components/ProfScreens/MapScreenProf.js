@@ -33,7 +33,7 @@ const MapScreenProf = (props) => {
       }}
       title={"Stop"}
       description={"Online/Offline Status"}
-      pinColor={isOnline ? "green" : "red"}
+      pinColor={"green"}
       onPress={() => updateAvailability()}
     >
       <MapView.Callout>
@@ -70,13 +70,12 @@ const MapScreenProf = (props) => {
         longitude: targetLongitude ? targetLongitude : 0,
       }}
       title={"Target"}
-      pinColor={"red"}
+      pinColor={"purple"}
       onPress={() => console.log("Hey")}
     ></MapView.Marker>
   );
 
   function updateAvailability() {
-    console.log("updating");
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({ online: !isOnline })
@@ -102,8 +101,7 @@ const MapScreenProf = (props) => {
       //update online status
       db.collection("Users")
         .doc(auth.currentUser.uid)
-        .get()
-        .then((snapshot) => {
+        .onSnapshot((snapshot) => {
           if (snapshot.exists) {
             setIsOnline(snapshot.data().online);
             setOnCall(snapshot.data().onCall);
@@ -123,7 +121,15 @@ const MapScreenProf = (props) => {
     })();
 
     props.navigation.addListener("focus", () => setLoading(!loading));
-  }, [props.navigation, latitude, longitude, targetLatitude, targetLongitude]);
+    console.log("online = " + isOnline);
+  }, [
+    props.navigation,
+    latitude,
+    longitude,
+    targetLatitude,
+    targetLongitude,
+    isOnline,
+  ]);
 
   let text = "Waiting..";
   if (errorMsg) {

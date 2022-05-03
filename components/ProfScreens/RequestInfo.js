@@ -84,7 +84,7 @@ const RequestInfo = (props) => {
         },
       })
       .then(
-        props.navigation.navigate("MapScreenProf", {
+        props.navigation.navigate("Map", {
           target_latitude: latitude,
           target_longitude: longitude,
         })

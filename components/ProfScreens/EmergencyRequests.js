@@ -21,6 +21,7 @@ const EmergencyRequests = (props) => {
   const [city, setCity] = useState("");
   const [currentEmergency, setCurrentEmergency] = useState(null);
   const [onCall, setOnCall] = useState(null);
+  const [isOnline, setIsOnline] = useState(null);
 
   // location info
   const findCity = async (latitude, longitude) => {
@@ -41,8 +42,7 @@ const EmergencyRequests = (props) => {
     // Get Current User
     db.collection("Users")
       .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
+      .onSnapshot((snapshot) => {
         if (snapshot.exists) {
           setCurrentUser(snapshot.data());
           setCurrentEmergency(snapshot.data().emergency);
@@ -56,7 +56,7 @@ const EmergencyRequests = (props) => {
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({ online: true })
-      .then(() => console.log("online now!"));
+      .then(() => console.log("online = " + isOnline));
 
     // Get Emergencies
     db.collection("Emergencies").onSnapshot((snapshot) => {
@@ -128,7 +128,7 @@ const EmergencyRequests = (props) => {
         <Text style={styles.emergency_title}>Accepted Emergency</Text>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => props.navigation.navigate("MapScreenProf")}
+          onPress={() => props.navigation.navigate("Map")}
         >
           {/* <Text style={styles.title}>{JSON.stringify(currentEmergency)}</Text> */}
           <Text style={styles.text_title}>Type</Text>
@@ -155,20 +155,6 @@ const EmergencyRequests = (props) => {
       {/* <Text>{JSON.stringify(currentEmergency)}</Text> */}
     </SafeAreaView>
   );
-
-  // return (
-  //   <SafeAreaView style={styles.listContainer}>
-  //     <Text style={styles.title}>Emergencies</Text>
-  //     <FlatList
-  //       data={requests}
-  //       renderItem={renderRequest}
-  //       keyExtractor={(item) => item.id}
-  //       ItemSeparatorComponent={listSeparator}
-  //     />
-  //     <Text>{JSON.stringify(currentEmergency)}</Text>
-  //     <Text>{JSON.stringify(currentUser.onCall)}</Text>
-  //   </SafeAreaView>
-  // );
 };
 
 const mapStateToProps = (store) => ({

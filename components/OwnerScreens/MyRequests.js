@@ -75,8 +75,7 @@ const MyRequests = (props) => {
   useEffect(() => {
     db.collection("Users")
       .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
+      .onSnapshot((snapshot) => {
         const requests = [];
         // console.log(snapshot.data().emergencies);
         snapshot.data().emergencies.forEach((e) => {
