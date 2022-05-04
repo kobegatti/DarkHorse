@@ -14,7 +14,6 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ProfileScreenProf from "./ProfileScreenProf";
 import MapScreenProf from "./MapScreenProf";
 import EmergencyRequests from "./EmergencyRequests";
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 const Tab = createMaterialBottomTabNavigator();
 

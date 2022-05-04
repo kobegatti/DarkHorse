@@ -14,6 +14,7 @@ import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 import { auth, db } from "../../config/firebase";
 import { connect } from "react-redux";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const ProfileScreenProf = (props) => {
   const [loading, setLoading] = useState(true);
@@ -108,16 +109,17 @@ const ProfileScreenProf = (props) => {
       </View>
 
       <View style={styles.userInfoSection}>
+
         <View style={styles.row}>
-          <Icon name="account-tie" color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
+          <FontAwesome name="id-badge" color="#183153" size={30} />
+          <Text style={styles.text}>
             {currentUser.title === "" ? "Your Title" : currentUser.title}
           </Text>
         </View>
 
         <View style={styles.row}>
-          <Icon name="map-marker-radius" color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
+          <FontAwesome name="compass" color="#183153" size={30} />
+          <Text style={styles.text}>
             {currentUser.location === ""
               ? "Your Location"
               : currentUser.location}
@@ -125,29 +127,67 @@ const ProfileScreenProf = (props) => {
         </View>
 
         <View style={styles.row}>
-          <Icon name="phone" color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
+        <FontAwesome name="phone" color="#183153" size={30} />
+          <Text style={styles.text}>
             {currentUser.workPhone === ""
               ? "Phone Number"
               : currentUser.workPhone}
           </Text>
         </View>
+        
+        
+        {/* <input onkeydown="phoneNumberFormatter()" id="phone-number" />
 
-        <View style={{ flexDirection: "row" }}>
-          <Icon name="email" color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
+        <script>
+          function formatPhoneNumber(value) {
+            if (!value) return value;
+            const phoneNumber = value.replace(/[^\d]/g, '');
+            const phoneNumberLength = phoneNumber.length;
+
+            if (phoneNumberLength < 4) return phoneNumber;
+            if (phoneNumberLenght < 7) {
+              return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+            }
+            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+              3,
+              6,
+              )}-${phoneNumber.slice(6,9)}`;
+          }
+
+          function phoneNumberFormatter() {
+            const inputField = document.getElementById('phone-number');
+            const formattedInputValue = formatPhoneNumber(inputField.value);
+            inputField.value = formattedInputValue;
+          }
+        </script> */}
+        
+       
+
+        <View style={styles.row}>
+        <FontAwesome name="envelope" color="#183153" size={30} />
+          <Text style={styles.text}>
             {currentUser.workEmail === ""
               ? "Work Email"
               : currentUser.workEmail}
           </Text>
         </View>
+
       </View>
 
       <View>
         <TouchableRipple onPress={() => {}}>
-          <View style={{ flexDirection: "row", paddingHorizontal: 30 }}>
-            <Icon name="cog-outline" color="#4169e1" size={25} />
+          <View style={{ flexDirection: "row", paddingHorizontal: 30, marginVertical: 12.5 }}>
+          <FontAwesome name="gear" color="#183153" size={30} />
             <Text style={styles.menuItemText}>Settings</Text>
+          </View>
+        </TouchableRipple>
+      </View>
+
+      <View>
+        <TouchableRipple onPress={() => handleSignOut()}>
+          <View style={{ flexDirection: "row", paddingHorizontal: 30, marginVertical: 12.5 }}>
+            <Icon name="logout" color="#183153" size={30} />
+            <Text style={styles.menuItemText}>Logout</Text>
           </View>
         </TouchableRipple>
       </View>
@@ -193,7 +233,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: 25,
   },
   infoBoxWrapper: {
     borderBottomColor: "#dddddd",
@@ -236,6 +276,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginHorizontal: 5,
+  },
+  text:{
+    color: "#183153", 
+    marginLeft: 20,
+    // marginBottom: 25,
+    // alignItems: 'center',
+    // fontWeight: "bold", 
+    fontFamily: 'Arial',
+    fontSize: 15, 
+    alignSelf: "center"
   },
   userBtnTxt: {
     color: "#2e64e5",
