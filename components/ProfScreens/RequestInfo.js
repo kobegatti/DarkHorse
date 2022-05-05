@@ -35,6 +35,8 @@ const RequestInfo = (props) => {
       emergency_id: emergencyID,
       vet_id: "",
     };
+
+    // Update emergency info for owners
     db.collection("Users")
       .doc(ownerID)
       .update({

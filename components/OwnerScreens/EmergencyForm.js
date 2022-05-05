@@ -14,6 +14,7 @@ import firebase from "firebase";
 import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 import { connect } from "react-redux";
+import * as Location from "expo-location";
 
 const EmergencyForm = (props) => {
   const emergencies = [
@@ -32,6 +33,9 @@ const EmergencyForm = (props) => {
   const [otherEmergency, setOtherEmergency] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const findCity = async (latitude, longitude) => {
     const place = await Location.reverseGeocodeAsync({
@@ -74,11 +78,6 @@ const EmergencyForm = (props) => {
             }
           } else {
             console.log("regular emergency");
-            // console.log(breed + " = " + request.data().breed);
-            // console.log(
-            //   typeOfEmergency + " = " + request.data().typeOfEmergency
-            // );
-            // console.log(auth.currentUser.uid + " = " + request.data().user_id);
             if (
               breed == request.data().breed &&
               typeOfEmergency == request.data().typeOfEmergency &&
@@ -99,8 +98,8 @@ const EmergencyForm = (props) => {
             typeOfEmergency: typeOfEmergency,
             accepted: false,
             user_id: auth.currentUser.uid,
-            latitude: currentUser.user_latitude,
-            longitude: currentUser.user_longitude,
+            latitude: latitude,
+            longitude: longitude,
           });
 
           db.collection("Users")
@@ -115,16 +114,6 @@ const EmergencyForm = (props) => {
               }),
             });
 
-          // db.collection("Users")
-          //   .doc(auth.currentUser.uid)
-          //   .update({
-          //     emergencies: firebase.firestore.FieldValue.arrayUnion({
-          //       type: typeOfEmergency,
-          //       breed: breed,
-          //       city: city,
-          //     }),
-          //   });
-
           Alert.alert("Your request has been submitted!");
         }
 
@@ -133,7 +122,24 @@ const EmergencyForm = (props) => {
   }
 
   useEffect(() => {
-    //console.log("USE EFFECT");
+    async () => {
+      let isMounted = true;
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setLatitude(location.coords.latitude);
+      setLongitude(location.coords.longitude);
+
+      return () => {
+        isMounted = false;
+      };
+    };
+
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
@@ -147,7 +153,7 @@ const EmergencyForm = (props) => {
       });
 
     props.navigation.addListener("focus", () => setLoading(!loading));
-  }, [props.navigation, loading]);
+  }, [props.navigation, loading, latitude, longitude]);
 
   return (
     <ScrollView style={styles.formWrapperScroll}>

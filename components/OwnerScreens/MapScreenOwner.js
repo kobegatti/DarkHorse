@@ -17,6 +17,7 @@ export default function MapScreenOwner(props) {
   const [vetLatitude, setVetLatitude] = useState(null);
   const [vetLongitude, setVetLongitude] = useState(null);
   const [vetID, setVetId] = useState("");
+  const [vets, setVets] = useState([]);
 
   var current_location = (
     <MapView.Marker
@@ -63,12 +64,11 @@ export default function MapScreenOwner(props) {
       //update online status
       db.collection("Users")
         .doc(auth.currentUser.uid)
-        .get()
-        .then((snapshot) => {
+        .onSnapshot((snapshot) => {
           if (snapshot.exists) {
             // setIsOnline(snapshot.data().online);
-            setVetId(snapshot.data().emergencies[0].vet_id);
-            console.log("vet_id = " + snapshot.data().emergencies[0].vet_id);
+            //setVetId(snapshot.data().emergencies[0].vet_id);
+            //console.log("vet_id = " + snapshot.data().emergencies[0].vet_id);
           } else {
             console.log("No such document!");
           }
@@ -77,8 +77,7 @@ export default function MapScreenOwner(props) {
       // get accepted vet location
       db.collection("Users")
         .doc(vetID)
-        .get()
-        .then((snapshot) => {
+        .onSnapshot((snapshot) => {
           if (snapshot.exists) {
             setVetLatitude(snapshot.data().user_latitude);
             setVetLongitude(snapshot.data().user_longitude);
@@ -93,12 +92,6 @@ export default function MapScreenOwner(props) {
         .update({ user_latitude: latitude, user_longitude: longitude })
         .then(console.log("location updated!"));
 
-      // find online vets
-      // const usersRef = db.collection("Users");
-      // const snapshot = await usersRef.get();
-      // snapshot.forEach((doc) => {
-      //   //console.log(doc.id, "=>", doc.data());
-      // });
       props.navigation.addListener("focus", () => setLoading(!loading));
     })();
   }, [latitude, longitude, vetLatitude, vetLongitude]);
