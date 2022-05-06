@@ -10,8 +10,6 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-import BottomSheet from "reanimated-bottom-sheet";
-import Animated from "react-native-reanimated";
 import { bindActionCreators } from "redux";
 import { fetchUser, clearData } from "../../redux/actions/index";
 
@@ -50,57 +48,6 @@ const EditProfileScreenProf = (props) => {
         navigation.navigate("CareXProf");
       });
   };
-
-  //   auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       db.collection("Users")
-  //         .doc(user.uid)
-  //         .update({
-  //           username: username,
-  //           title: title,
-  //           bio: bio,
-  //           location: location,
-  //           workPhone: workPhone,
-  //           workEmail: workEmail,
-  //         })
-  //         .then(() => {
-  //           console.log("User Updated!");
-  //           // Alert.alert(
-  //           //   "Profile Updated!",
-  //           //   "Your profile has been updated successfully."
-  //           // );
-  //           navigation.navigate("CareX");
-  //         });
-  //     }
-  //   });
-  // };
-
-  // const getUser = () => {
-  //   auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       db.collection("Users")
-  //         .doc(user.uid)
-  //         .get()
-  //         .then((documentSnapshot) => {
-  //           if (documentSnapshot.exists) {
-  //             // console.log("User Data", documentSnapshot.data());
-  //             // setUserData(documentSnapshot.data());
-  //             setUsername(documentSnapshot.data().username);
-  //             setTitle(documentSnapshot.data().title);
-  //             setBio(documentSnapshot.data().bio);
-  //             setLocation(documentSnapshot.data().location);
-  //             setWorkPhone(documentSnapshot.data().workPhone);
-  //             setWorkEmail(documentSnapshot.data().workEmail);
-  //           }
-  //         });
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   getUser();
-  //   console.log(username);
-  // }, []);
 
   return (
     <ScrollView>
@@ -148,7 +95,7 @@ const EditProfileScreenProf = (props) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.action}>
+          <View style={styles.fullName}>
             <FontAwesome name="user-o" size={20} />
             <TextInput
               placeholder="Full Name"
@@ -180,6 +127,7 @@ const EditProfileScreenProf = (props) => {
               autoCorrect={false}
               style={styles.textInput}
               value={bio}
+              maxLength={250} // sets the max character limit for Bio
               onChangeText={(val) => setBio(val)}
             />
           </View>
@@ -311,6 +259,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   action: {
+    flexDirection: "row",
+    marginTop: 8,
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 3,
+  },
+  fullName: {
     flexDirection: "row",
     marginTop: 8,
     marginBottom: 8,
