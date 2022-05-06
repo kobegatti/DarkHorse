@@ -1,6 +1,7 @@
 {
   "build": {
     "preview": {
+      "releaseChannel": "default",
       "ios": {
         "simulator": true
       }
