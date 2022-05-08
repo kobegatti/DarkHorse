@@ -10,7 +10,6 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-
 import ProfileScreenProf from "./ProfileScreenProf";
 import MapScreenProf from "./MapScreenProf";
 import EmergencyRequests from "./EmergencyRequests";

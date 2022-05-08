@@ -111,7 +111,7 @@ export class App extends Component {
             <Stack.Screen
               name="LogInScreen"
               component={LogInScreen}
-              options={{ title: "Login" }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="SignUpScreen"
