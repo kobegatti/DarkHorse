@@ -22,8 +22,7 @@ const MapScreenProf = (props) => {
   const [longitude, setLongitude] = useState(null);
   const [isOnline, setIsOnline] = useState(true);
   const [onCall, setOnCall] = useState(false);
-  const [targetLatitude, setTargetLatitude] = useState(null);
-  const [targetLongitude, setTargetLongitude] = useState(null);
+  const [markers, setMarkers] = useState([]);
 
   var online = (
     <MapView.Marker
@@ -63,18 +62,6 @@ const MapScreenProf = (props) => {
     </MapView.Marker>
   );
 
-  var target = (
-    <MapView.Marker
-      coordinate={{
-        latitude: targetLatitude ? targetLatitude : 0,
-        longitude: targetLongitude ? targetLongitude : 0,
-      }}
-      title={"Target"}
-      pinColor={"purple"}
-      onPress={() => console.log("Hey")}
-    ></MapView.Marker>
-  );
-
   function updateAvailability() {
     db.collection("Users")
       .doc(auth.currentUser.uid)
@@ -105,11 +92,21 @@ const MapScreenProf = (props) => {
           if (snapshot.exists) {
             setIsOnline(snapshot.data().online);
             setOnCall(snapshot.data().onCall);
-            setTargetLatitude(snapshot.data().emergency.latitude);
-            setTargetLongitude(snapshot.data().emergency.longitude);
-            setOnCall(snapshot.data().onCall);
           } else {
-            console.log("No such document!");
+            console.log("No such user!");
+          }
+        });
+
+      // get vet's appointments
+      db.collection("Users")
+        .doc(auth.currentUser.uid)
+        .onSnapshot((snapshot) => {
+          if (snapshot.exists) {
+            snapshot.data().appointments.forEach((appointment) => {
+              console.log(appointment);
+            });
+          } else {
+            console.log("No such user!");
           }
         });
 
@@ -122,14 +119,7 @@ const MapScreenProf = (props) => {
 
     props.navigation.addListener("focus", () => setLoading(!loading));
     console.log("online = " + isOnline);
-  }, [
-    props.navigation,
-    latitude,
-    longitude,
-    targetLatitude,
-    targetLongitude,
-    isOnline,
-  ]);
+  }, [props.navigation, latitude, longitude, isOnline]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -171,8 +161,8 @@ const MapScreenProf = (props) => {
         zoomEnabled
         style={{ flex: 1 }}
         initialRegion={{
-          latitude: targetLatitude, //latitude
-          longitude: targetLongitude, //longitude
+          latitude: latitude, //latitude
+          longitude: longitude, //longitude
           // latitudeDelta: 0.0922,
           // longitudeDelta: 0.0421,
           latitudeDelta: 0.222,
@@ -180,7 +170,6 @@ const MapScreenProf = (props) => {
         }}
       >
         {isOnline ? online : offline}
-        {target}
       </MapView>
     );
   }

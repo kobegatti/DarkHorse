@@ -105,7 +105,7 @@ const SignUpScreen = ({ navigation }) => {
             online: true,
             user_latitude: null,
             user_longitude: null,
-            requests: [],
+            appointments: [],
             onCall: false,
           });
         })

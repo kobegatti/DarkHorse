@@ -7,8 +7,8 @@ import {
   TextInput,
   View,
   Button,
-  Picker,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { auth, db } from "../../config/firebase";
 import firebase from "firebase";
 import { bindActionCreators } from "redux";
@@ -36,6 +36,7 @@ const EmergencyForm = (props) => {
   const [location, setLocation] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const findCity = async (latitude, longitude) => {
     const place = await Location.reverseGeocodeAsync({
@@ -122,7 +123,8 @@ const EmergencyForm = (props) => {
   }
 
   useEffect(() => {
-    async () => {
+    console.log("HI");
+    (async () => {
       let isMounted = true;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -130,29 +132,27 @@ const EmergencyForm = (props) => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: false,
+      });
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
 
-      return () => {
-        isMounted = false;
-      };
-    };
+      db.collection("Users")
+        .doc(auth.currentUser.uid)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            setCurrentUser(snapshot.data());
+            setBreeds(snapshot.data().breeds);
+          } else {
+            console.log("user does not exist");
+          }
+        });
 
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-          setBreeds(snapshot.data().breeds);
-        } else {
-          console.log("user does not exist");
-        }
-      });
-
-    props.navigation.addListener("focus", () => setLoading(!loading));
+      props.navigation.addListener("focus", () => setLoading(!loading));
+    })();
   }, [props.navigation, loading, latitude, longitude]);
 
   return (

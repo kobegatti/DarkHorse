@@ -33,12 +33,12 @@ const EmergencyRequests = (props) => {
     let city;
     place.find((p) => {
       city = p.city;
-      console.log(p.city);
       setCity(p.city);
     });
   };
 
   useEffect(() => {
+    let isMounted = true;
     // Get Current User
     db.collection("Users")
       .doc(auth.currentUser.uid)
@@ -53,18 +53,14 @@ const EmergencyRequests = (props) => {
       });
 
     // Set status to online
-    db.collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ online: true })
-      .then(() => console.log("online = " + isOnline));
+    db.collection("Users").doc(auth.currentUser.uid).update({ online: true });
 
     // Get Emergencies
     db.collection("Emergencies").onSnapshot((snapshot) => {
       const emergencies = [];
       snapshot.forEach((doc) => {
         findCity(doc.data().latitude, doc.data().longitude);
-        // setUserID(doc.data().user_id);
-        // setEmergencyId(doc.id);
+
         emergencies.push({
           accepted: doc.data().accepted,
           breed: doc.data().breed,
@@ -80,6 +76,10 @@ const EmergencyRequests = (props) => {
       setRequests(emergencies);
     });
     props.navigation.addListener("focus", () => setLoading(!loading));
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading, city]);
 
   const listSeparator = () => {
@@ -121,27 +121,6 @@ const EmergencyRequests = (props) => {
       <Item item={request.item} backgroundColor="#000080" textColor="#000000" />
     );
   };
-
-  // if (onCall) {
-  //   return (
-  //     <SafeAreaView>
-  //       <Text style={styles.emergency_title}>Accepted Emergency</Text>
-  //       <TouchableOpacity
-  //         style={styles.box}
-  //         onPress={() => props.navigation.navigate("Map")}
-  //       >
-  //         {/* <Text style={styles.title}>{JSON.stringify(currentEmergency)}</Text> */}
-  //         <Text style={styles.text_title}>Type</Text>
-  //         <Text style={styles.text_content}>{currentEmergency.type}</Text>
-  //         <Text style={styles.text_title}>Breed</Text>
-  //         <Text style={styles.text_content}>{currentEmergency.breed}</Text>
-  //         <Text style={styles.text_title}>Location</Text>
-  //         <Text style={styles.text_content}>{currentEmergency.city}</Text>
-  //         {/* <Text style={styles.text_content}>{userID}</Text> */}
-  //       </TouchableOpacity>
-  //     </SafeAreaView>
-  //   );
-  // }
 
   return (
     <SafeAreaView style={styles.listContainer}>

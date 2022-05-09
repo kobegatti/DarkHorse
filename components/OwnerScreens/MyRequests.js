@@ -16,12 +16,6 @@ const MyRequests = (props) => {
   const [currentUser, setCurrentUser] = useState(props);
   const [MyRequests, setMyRequests] = useState([]);
 
-  const handleComplete = () => {
-    console.log("handle complete");
-  };
-
-  const handleRemove = () => {};
-
   const listSeparator = () => {
     return (
       <View
@@ -73,6 +67,7 @@ const MyRequests = (props) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .onSnapshot((snapshot) => {
@@ -91,6 +86,9 @@ const MyRequests = (props) => {
         setMyRequests(requests);
       });
     props.navigation.addListener("focus", () => setLoading(!loading));
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading]);
 
   return (

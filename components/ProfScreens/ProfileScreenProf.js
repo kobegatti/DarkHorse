@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     // marginBottom: 25,
     // alignItems: 'center',
     // fontWeight: "bold",
-    fontFamily: "Arial",
+    // fontFamily: "Arial",
     // fontFamily: "Arial",
     fontSize: 15,
     alignSelf: "center",

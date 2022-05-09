@@ -55,29 +55,16 @@ const RequestInfo = (props) => {
         }),
       });
 
-    // db.collection("Users")
-    //   .doc(ownerID)
-    //   .get()
-    //   .then((snapshot) => {
-    //     snapshot.data().emergencies.forEach((e) => {
-    //       if (e.emergency_id == emergencyID) {
-    //         console.log(e);
-    //         e.accepted = true;
-    //         console.log(e);
-    //       }
-    //     });
-    //   });
-
     // delete Emergency
     db.collection("Emergencies").doc(emergencyID).delete();
 
     // Vets
-    // Set onCall to true, submit emergency
+    // Set onCall to true, add appointment to vet's queue
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({
         onCall: true,
-        calls: firebase.firestore.FieldValue.arrayUnion({
+        appointments: firebase.firestore.FieldValue.arrayUnion({
           type: type,
           breed: breed,
           emergency_id: emergencyID,
@@ -85,12 +72,7 @@ const RequestInfo = (props) => {
           vet_id: auth.currentUser.uid,
         }),
       })
-      .then(
-        props.navigation.navigate("Map", {
-          target_latitude: latitude,
-          target_longitude: longitude,
-        })
-      );
+      .then(props.navigation.navigate("Map"));
   };
 
   useEffect(() => {

@@ -30,24 +30,6 @@ export default function MapScreenOwner(props) {
     ></MapView.Marker>
   );
 
-  var vet_location = (
-    <MapView.Marker
-      coordinate={{
-        latitude: vetLatitude ? vetLatitude : 0,
-        longitude: vetLongitude ? vetLongitude : 0,
-      }}
-      title={"Stop"}
-      pinColor={"blue"}
-      onPress={() => console.log("find location")}
-    >
-      <MapView.Callout>
-        <View>
-          <Text>GO</Text>
-        </View>
-      </MapView.Callout>
-    </MapView.Marker>
-  );
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -144,7 +126,7 @@ export default function MapScreenOwner(props) {
       }}
     >
       {current_location}
-      {vet_location}
+      {/* {vet_location} */}
     </MapView>
   );
 }
