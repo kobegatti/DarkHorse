@@ -41,7 +41,8 @@ const RequestInfo = (props) => {
       .doc(ownerID)
       .update({
         emergencies: firebase.firestore.FieldValue.arrayRemove(obj),
-      });
+      })
+      .catch((error) => alert(error.message));
 
     db.collection("Users")
       .doc(ownerID)
@@ -53,10 +54,14 @@ const RequestInfo = (props) => {
           accepted: true,
           vet_id: auth.currentUser.uid,
         }),
-      });
+      })
+      .catch((error) => alert(error.message));
 
     // delete Emergency
-    db.collection("Emergencies").doc(emergencyID).delete();
+    db.collection("Emergencies")
+      .doc(emergencyID)
+      .delete()
+      .catch((error) => alert(error.message));
 
     // Vets
     // Set onCall to true, add appointment to vet's queue
@@ -72,10 +77,12 @@ const RequestInfo = (props) => {
           vet_id: auth.currentUser.uid,
         }),
       })
-      .then(props.navigation.navigate("Map"));
+      .then(props.navigation.navigate("Map"))
+      .catch((error) => alert(error.message));
   };
 
   useEffect(() => {
+    let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
@@ -97,6 +104,10 @@ const RequestInfo = (props) => {
     setVetId(props.route.params.vet_id);
 
     props.navigation.addListener("focus", () => setLoading(!loading));
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading]);
 
   return (

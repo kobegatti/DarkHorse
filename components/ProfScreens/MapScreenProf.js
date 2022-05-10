@@ -71,6 +71,7 @@ const MapScreenProf = (props) => {
   }
 
   useEffect(() => {
+    let isMounted = true;
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -114,11 +115,15 @@ const MapScreenProf = (props) => {
       db.collection("Users")
         .doc(auth.currentUser.uid)
         .update({ user_latitude: latitude, user_longitude: longitude })
-        .then(console.log("location updated!"));
+        .then(console.log("location updated!"))
+        .catch((error) => alert(error.message));
     })();
 
     props.navigation.addListener("focus", () => setLoading(!loading));
-    console.log("online = " + isOnline);
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, latitude, longitude, isOnline]);
 
   let text = "Waiting..";

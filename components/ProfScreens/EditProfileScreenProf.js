@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect } from "react";
+import React, { createRef, useState } from "react";
 import {
   View,
   Text,
@@ -28,7 +28,7 @@ const EditProfileScreenProf = (props) => {
   const [workEmail, setWorkEmail] = useState(currentUser.workEmail);
   const navigation = useNavigation();
 
-  const handleUpdate = async (props) => {
+  const handleUpdate = (props) => {
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({
@@ -41,12 +41,9 @@ const EditProfileScreenProf = (props) => {
       })
       .then(() => {
         console.log("User Updated!");
-        // Alert.alert(
-        //   "Profile Updated!",
-        //   "Your profile has been updated successfully."
-        // );
         navigation.navigate("CareXProf");
-      });
+      })
+      .catch((error) => alert(error.message));
   };
 
   return (

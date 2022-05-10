@@ -35,6 +35,7 @@ const ProfileScreenProf = (props) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
@@ -44,8 +45,13 @@ const ProfileScreenProf = (props) => {
         } else {
           console.log("user does not exist");
         }
-      });
+      })
+      .catch((error) => alert(error.message));
     props.navigation.addListener("focus", () => setLoading(!loading));
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading]);
 
   if (!currentUser) {

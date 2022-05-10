@@ -27,10 +27,13 @@ const EmergencyInfo = (props) => {
     );
 
     // vet not on call and current emergency removed
-    db.collection("Users").doc(vetID).update({
-      onCall: false,
-      emergency: {},
-    });
+    db.collection("Users")
+      .doc(vetID)
+      .update({
+        onCall: false,
+        emergency: {},
+      })
+      .catch((error) => alert(error.message));
 
     db.collection("Users")
       .doc(auth.currentUser.uid)
@@ -42,7 +45,8 @@ const EmergencyInfo = (props) => {
           vet_id: vetID,
           emergency_id: emergencyID,
         }),
-      });
+      })
+      .catch((error) => alert(error.message));
 
     props.navigation.navigate("MyRequests");
   };
@@ -60,17 +64,23 @@ const EmergencyInfo = (props) => {
           vet_id: vetID,
           emergency_id: emergencyID,
         }),
-      });
+      })
+      .catch((error) => alert(error.message));
 
     props.navigation.navigate("MyRequests");
   };
 
   useEffect(() => {
+    let isMounted = true;
     setVetId(props.route.params.vet_id);
     setTypeOfEmergency(props.route.params.type);
     setBreed(props.route.params.breed);
     setAccepted(props.route.params.accepted);
     setEmergencyId(props.route.params.emergency_id);
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

@@ -29,6 +29,7 @@ const EditProfileScreenOwner = (props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
@@ -41,8 +42,13 @@ const EditProfileScreenOwner = (props) => {
         } else {
           console.log("user does not exist");
         }
-      });
+      })
+      .catch((error) => alert(error.message));
     props.navigation.addListener("focus", () => setLoading(!loading));
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading]);
 
   const handleUpdate = (props) => {
@@ -57,7 +63,8 @@ const EditProfileScreenOwner = (props) => {
       .then(() => {
         console.log("User Updated!");
         navigation.navigate("CareX");
-      });
+      })
+      .catch((error) => alert(error.message));
   };
 
   const handleAddBreed = () => {

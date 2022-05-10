@@ -53,7 +53,10 @@ const EmergencyRequests = (props) => {
       });
 
     // Set status to online
-    db.collection("Users").doc(auth.currentUser.uid).update({ online: true });
+    db.collection("Users")
+      .doc(auth.currentUser.uid)
+      .update({ online: true })
+      .catch((error) => alert(error.message));
 
     // Get Emergencies
     db.collection("Emergencies").onSnapshot((snapshot) => {

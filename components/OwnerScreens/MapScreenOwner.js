@@ -31,6 +31,7 @@ export default function MapScreenOwner(props) {
   );
 
   useEffect(() => {
+    let isMounted = true;
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -54,7 +55,8 @@ export default function MapScreenOwner(props) {
           } else {
             console.log("No such document!");
           }
-        });
+        })
+        .catch((error) => alert(error.message));
 
       // get accepted vet location
       db.collection("Users")
@@ -66,16 +68,22 @@ export default function MapScreenOwner(props) {
           } else {
             console.log("No such document!");
           }
-        });
+        })
+        .catch((error) => alert(error.message));
 
       // update user location
       db.collection("Users")
         .doc(auth.currentUser.uid)
         .update({ user_latitude: latitude, user_longitude: longitude })
-        .then(console.log("location updated!"));
+        .then(console.log("location updated!"))
+        .catch((error) => alert(error.message));
 
       props.navigation.addListener("focus", () => setLoading(!loading));
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [latitude, longitude, vetLatitude, vetLongitude]);
 
   let text = "Waiting..";

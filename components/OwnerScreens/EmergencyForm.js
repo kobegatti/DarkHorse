@@ -123,7 +123,7 @@ const EmergencyForm = (props) => {
   }
 
   useEffect(() => {
-    console.log("HI");
+    let isMounted = true;
     (async () => {
       let isMounted = true;
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -149,10 +149,15 @@ const EmergencyForm = (props) => {
           } else {
             console.log("user does not exist");
           }
-        });
+        })
+        .catch((error) => alert(error.message));
 
       props.navigation.addListener("focus", () => setLoading(!loading));
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [props.navigation, loading, latitude, longitude]);
 
   return (
