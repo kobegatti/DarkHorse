@@ -89,27 +89,37 @@ const MapScreenProf = (props) => {
       //update online status
       db.collection("Users")
         .doc(auth.currentUser.uid)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            setIsOnline(snapshot.data().online);
-            setOnCall(snapshot.data().onCall);
-          } else {
-            console.log("No such user!");
+        .onSnapshot(
+          (snapshot) => {
+            if (snapshot.exists) {
+              setIsOnline(snapshot.data().online);
+              setOnCall(snapshot.data().onCall);
+            } else {
+              console.log("No such user!");
+            }
+          },
+          (error) => {
+            console.log(error.message);
           }
-        });
+        );
 
       // get vet's appointments
       db.collection("Users")
         .doc(auth.currentUser.uid)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            snapshot.data().appointments.forEach((appointment) => {
-              console.log(appointment);
-            });
-          } else {
-            console.log("No such user!");
+        .onSnapshot(
+          (snapshot) => {
+            if (snapshot.exists) {
+              snapshot.data().appointments.forEach((appointment) => {
+                console.log(appointment);
+              });
+            } else {
+              console.log("No such user!");
+            }
+          },
+          (error) => {
+            console.log(error.message);
           }
-        });
+        );
 
       // update user location
       db.collection("Users")
@@ -117,10 +127,9 @@ const MapScreenProf = (props) => {
         .update({ user_latitude: latitude, user_longitude: longitude })
         .then(console.log("location updated!"))
         .catch((error) => alert(error.message));
+
+      props.navigation.addListener("focus", () => setLoading(!loading));
     })();
-
-    props.navigation.addListener("focus", () => setLoading(!loading));
-
     return () => {
       isMounted = false;
     };

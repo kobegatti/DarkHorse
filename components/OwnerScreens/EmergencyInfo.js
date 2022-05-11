@@ -52,7 +52,10 @@ const EmergencyInfo = (props) => {
   };
 
   const handleRemove = () => {
-    db.collection("Emergencies").doc(emergencyID).delete();
+    db.collection("Emergencies")
+      .doc(emergencyID)
+      .delete()
+      .catch((error) => alert(error.message));
 
     db.collection("Users")
       .doc(auth.currentUser.uid)

@@ -70,21 +70,26 @@ const MyRequests = (props) => {
     let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
-      .onSnapshot((snapshot) => {
-        const requests = [];
-        // console.log(snapshot.data().emergencies);
-        snapshot.data().emergencies.forEach((e) => {
-          requests.push({
-            accepted: e.accepted,
-            breed: e.breed,
-            type: e.type,
-            id: e.emergency_id,
-            vet_id: e.vet_id,
+      .onSnapshot(
+        (snapshot) => {
+          const requests = [];
+          // console.log(snapshot.data().emergencies);
+          snapshot.data().emergencies.forEach((e) => {
+            requests.push({
+              accepted: e.accepted,
+              breed: e.breed,
+              type: e.type,
+              id: e.emergency_id,
+              vet_id: e.vet_id,
+            });
           });
-        });
 
-        setMyRequests(requests);
-      });
+          setMyRequests(requests);
+        },
+        (error) => {
+          console.log(error.message);
+        }
+      );
     props.navigation.addListener("focus", () => setLoading(!loading));
     return () => {
       isMounted = false;

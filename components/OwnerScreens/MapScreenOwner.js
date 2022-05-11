@@ -47,29 +47,40 @@ export default function MapScreenOwner(props) {
       //update online status
       db.collection("Users")
         .doc(auth.currentUser.uid)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            // setIsOnline(snapshot.data().online);
-            //setVetId(snapshot.data().emergencies[0].vet_id);
-            //console.log("vet_id = " + snapshot.data().emergencies[0].vet_id);
-          } else {
-            console.log("No such document!");
+        .onSnapshot(
+          (snapshot) => {
+            if (snapshot.exists) {
+              // setIsOnline(snapshot.data().online);
+              //setVetId(snapshot.data().emergencies[0].vet_id);
+              //console.log("vet_id = " + snapshot.data().emergencies[0].vet_id);
+            } else {
+              console.log("No such document!");
+            }
+          },
+          (error) => {
+            console.log(error.message);
           }
-        })
-        .catch((error) => alert(error.message));
+        );
 
       // get accepted vet location
       db.collection("Users")
         .doc(vetID)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            setVetLatitude(snapshot.data().user_latitude);
-            setVetLongitude(snapshot.data().user_longitude);
-          } else {
-            console.log("No such document!");
+        .onSnapshot(
+          (snapshot) => {
+            if (snapshot.exists) {
+              setVetLatitude(snapshot.data().user_latitude);
+              setVetLongitude(snapshot.data().user_longitude);
+            } else {
+              console.log("No such document!");
+            }
+            (error) => {
+              console.log(error.message);
+            };
+          },
+          (error) => {
+            console.log(error.message);
           }
-        })
-        .catch((error) => alert(error.message));
+        );
 
       // update user location
       db.collection("Users")

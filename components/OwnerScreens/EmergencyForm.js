@@ -39,6 +39,7 @@ const EmergencyForm = (props) => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const findCity = async (latitude, longitude) => {
+    let isMounted = true;
     const place = await Location.reverseGeocodeAsync({
       latitude: latitude,
       longitude: longitude,
@@ -50,6 +51,10 @@ const EmergencyForm = (props) => {
       console.log(p.city);
       setCity(p.city);
     });
+
+    return () => {
+      isMounted = false;
+    };
   };
 
   function handleRequest() {
@@ -67,27 +72,29 @@ const EmergencyForm = (props) => {
     db.collection("Emergencies")
       .get()
       .then((snapshot) => {
-        snapshot.forEach((request) => {
-          // console.log(request.id + " => " + request.data());
-          if (typeOfEmergency == "Other") {
-            if (
-              breed == request.data().breed &&
-              otherEmergency == request.data().typeOfEmergency &&
-              auth.currentUser.uid == request.data().user_id
-            ) {
-              sameRequest = true;
+        snapshot
+          .forEach((request) => {
+            // console.log(request.id + " => " + request.data());
+            if (typeOfEmergency == "Other") {
+              if (
+                breed == request.data().breed &&
+                otherEmergency == request.data().typeOfEmergency &&
+                auth.currentUser.uid == request.data().user_id
+              ) {
+                sameRequest = true;
+              }
+            } else {
+              console.log("regular emergency");
+              if (
+                breed == request.data().breed &&
+                typeOfEmergency == request.data().typeOfEmergency &&
+                auth.currentUser.uid == request.data().user_id
+              ) {
+                sameRequest = true;
+              }
             }
-          } else {
-            console.log("regular emergency");
-            if (
-              breed == request.data().breed &&
-              typeOfEmergency == request.data().typeOfEmergency &&
-              auth.currentUser.uid == request.data().user_id
-            ) {
-              sameRequest = true;
-            }
-          }
-        });
+          })
+          .catch((error) => alert(error.message));
 
         if (sameRequest) {
           Alert.alert("This is a duplicate request");
@@ -113,7 +120,8 @@ const EmergencyForm = (props) => {
                 emergency_id: newEmergencyRefID,
                 vet_id: "",
               }),
-            });
+            })
+            .catch((error) => alert(error.message));
 
           Alert.alert("Your request has been submitted!");
         }
@@ -125,7 +133,6 @@ const EmergencyForm = (props) => {
   useEffect(() => {
     let isMounted = true;
     (async () => {
-      let isMounted = true;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
@@ -154,7 +161,6 @@ const EmergencyForm = (props) => {
 
       props.navigation.addListener("focus", () => setLoading(!loading));
     })();
-
     return () => {
       isMounted = false;
     };

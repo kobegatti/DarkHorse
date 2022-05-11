@@ -92,7 +92,8 @@ const RequestInfo = (props) => {
         } else {
           console.log("user does not exist");
         }
-      });
+      })
+      .catch((error) => alert(error.message));
 
     setType(props.route.params.type);
     setBreed(props.route.params.breed);

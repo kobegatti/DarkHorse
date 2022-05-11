@@ -42,15 +42,20 @@ const EmergencyRequests = (props) => {
     // Get Current User
     db.collection("Users")
       .doc(auth.currentUser.uid)
-      .onSnapshot((snapshot) => {
-        if (snapshot.exists) {
-          setCurrentUser(snapshot.data());
-          setCurrentEmergency(snapshot.data().emergency);
-          setOnCall(snapshot.data().onCall);
-        } else {
-          console.log("user does not exist");
+      .onSnapshot(
+        (snapshot) => {
+          if (snapshot.exists) {
+            setCurrentUser(snapshot.data());
+            setCurrentEmergency(snapshot.data().emergency);
+            setOnCall(snapshot.data().onCall);
+          } else {
+            console.log("user does not exist");
+          }
+        },
+        (error) => {
+          console.log(error.message);
         }
-      });
+      );
 
     // Set status to online
     db.collection("Users")
@@ -59,25 +64,30 @@ const EmergencyRequests = (props) => {
       .catch((error) => alert(error.message));
 
     // Get Emergencies
-    db.collection("Emergencies").onSnapshot((snapshot) => {
-      const emergencies = [];
-      snapshot.forEach((doc) => {
-        findCity(doc.data().latitude, doc.data().longitude);
+    db.collection("Emergencies").onSnapshot(
+      (snapshot) => {
+        const emergencies = [];
+        snapshot.forEach((doc) => {
+          findCity(doc.data().latitude, doc.data().longitude);
 
-        emergencies.push({
-          accepted: doc.data().accepted,
-          breed: doc.data().breed,
-          type: doc.data().typeOfEmergency,
-          user_id: doc.data().user_id,
-          id: doc.id,
-          vet_id: doc.data().vet_id,
-          city: city,
-          latitude: doc.data().latitude,
-          longitude: doc.data().longitude,
+          emergencies.push({
+            accepted: doc.data().accepted,
+            breed: doc.data().breed,
+            type: doc.data().typeOfEmergency,
+            user_id: doc.data().user_id,
+            id: doc.id,
+            vet_id: doc.data().vet_id,
+            city: city,
+            latitude: doc.data().latitude,
+            longitude: doc.data().longitude,
+          });
         });
-      });
-      setRequests(emergencies);
-    });
+        setRequests(emergencies);
+      },
+      (error) => {
+        console.log(error.message);
+      }
+    );
     props.navigation.addListener("focus", () => setLoading(!loading));
 
     return () => {
