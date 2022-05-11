@@ -45,6 +45,7 @@ export class App extends Component {
     this.state = {
       loaded: false,
       type: "",
+      isMounted: false,
     };
   }
 
@@ -55,11 +56,13 @@ export class App extends Component {
           loggedIn: false,
           loaded: true,
           type: "",
+          isMounted: false,
         });
       } else {
         this.setState({
           loggedIn: true,
           loaded: true,
+          isMounted: true,
         });
         db.collection("Users")
           .doc(user.uid)
@@ -78,7 +81,9 @@ export class App extends Component {
     });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
 
   render() {
     console.log("App executed");

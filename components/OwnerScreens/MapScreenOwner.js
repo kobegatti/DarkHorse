@@ -63,24 +63,24 @@ export default function MapScreenOwner(props) {
         );
 
       // get accepted vet location
-      db.collection("Users")
-        .doc(vetID)
-        .onSnapshot(
-          (snapshot) => {
-            if (snapshot.exists) {
-              setVetLatitude(snapshot.data().user_latitude);
-              setVetLongitude(snapshot.data().user_longitude);
-            } else {
-              console.log("No such document!");
-            }
-            (error) => {
-              console.log(error.message);
-            };
-          },
-          (error) => {
-            console.log(error.message);
-          }
-        );
+      // db.collection("Users")
+      //   .doc(vetID)
+      //   .onSnapshot(
+      //     (snapshot) => {
+      //       if (snapshot.exists) {
+      //         setVetLatitude(snapshot.data().user_latitude);
+      //         setVetLongitude(snapshot.data().user_longitude);
+      //       } else {
+      //         console.log("No such document!");
+      //       }
+      //       (error) => {
+      //         console.log(error.message);
+      //       };
+      //     },
+      //     (error) => {
+      //       console.log(error.message);
+      //     }
+      //   );
 
       // update user location
       db.collection("Users")

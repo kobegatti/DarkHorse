@@ -85,12 +85,13 @@ const MyRequests = (props) => {
           });
 
           setMyRequests(requests);
+          props.navigation.addListener("focus", () => setLoading(!loading));
         },
         (error) => {
           console.log(error.message);
         }
       );
-    props.navigation.addListener("focus", () => setLoading(!loading));
+
     return () => {
       isMounted = false;
     };

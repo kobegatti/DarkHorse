@@ -63,11 +63,16 @@ const MapScreenProf = (props) => {
   );
 
   function updateAvailability() {
+    let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({ online: !isOnline })
       .then(console.log("availability updated!"));
     setIsOnline(!isOnline);
+
+    return () => {
+      isMounted = false;
+    };
   }
 
   useEffect(() => {

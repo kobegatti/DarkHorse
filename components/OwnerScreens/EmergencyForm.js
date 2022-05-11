@@ -72,43 +72,43 @@ const EmergencyForm = (props) => {
     db.collection("Emergencies")
       .get()
       .then((snapshot) => {
-        snapshot
-          .forEach((request) => {
-            // console.log(request.id + " => " + request.data());
-            if (typeOfEmergency == "Other") {
-              if (
-                breed == request.data().breed &&
-                otherEmergency == request.data().typeOfEmergency &&
-                auth.currentUser.uid == request.data().user_id
-              ) {
-                sameRequest = true;
-              }
-            } else {
-              console.log("regular emergency");
-              if (
-                breed == request.data().breed &&
-                typeOfEmergency == request.data().typeOfEmergency &&
-                auth.currentUser.uid == request.data().user_id
-              ) {
-                sameRequest = true;
-              }
+        snapshot.forEach((request) => {
+          // console.log(request.id + " => " + request.data());
+          if (typeOfEmergency == "Other") {
+            if (
+              breed == request.data().breed &&
+              otherEmergency == request.data().typeOfEmergency &&
+              auth.currentUser.uid == request.data().user_id
+            ) {
+              sameRequest = true;
             }
-          })
-          .catch((error) => alert(error.message));
+          } else {
+            console.log("regular emergency");
+            if (
+              breed == request.data().breed &&
+              typeOfEmergency == request.data().typeOfEmergency &&
+              auth.currentUser.uid == request.data().user_id
+            ) {
+              sameRequest = true;
+            }
+          }
+        });
 
         if (sameRequest) {
           Alert.alert("This is a duplicate request");
         } else {
           var newEmergencyRef = db.collection("Emergencies").doc();
           var newEmergencyRefID = newEmergencyRef.id;
-          newEmergencyRef.set({
-            breed: breed,
-            typeOfEmergency: typeOfEmergency,
-            accepted: false,
-            user_id: auth.currentUser.uid,
-            latitude: latitude,
-            longitude: longitude,
-          });
+          newEmergencyRef
+            .set({
+              breed: breed,
+              typeOfEmergency: typeOfEmergency,
+              accepted: false,
+              user_id: auth.currentUser.uid,
+              latitude: latitude,
+              longitude: longitude,
+            })
+            .catch((error) => alert(error.message));
 
           db.collection("Users")
             .doc(auth.currentUser.uid)
@@ -120,14 +120,14 @@ const EmergencyForm = (props) => {
                 emergency_id: newEmergencyRefID,
                 vet_id: "",
               }),
-            })
-            .catch((error) => alert(error.message));
+            });
 
           Alert.alert("Your request has been submitted!");
         }
 
         props.navigation.navigate("MyRequests");
-      });
+      })
+      .catch((error) => alert(error.message));
   }
 
   useEffect(() => {
@@ -158,9 +158,8 @@ const EmergencyForm = (props) => {
           }
         })
         .catch((error) => alert(error.message));
-
-      props.navigation.addListener("focus", () => setLoading(!loading));
     })();
+    props.navigation.addListener("focus", () => setLoading(!loading));
     return () => {
       isMounted = false;
     };
