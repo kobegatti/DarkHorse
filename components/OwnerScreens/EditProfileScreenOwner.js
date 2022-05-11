@@ -30,6 +30,7 @@ const EditProfileScreenOwner = (props) => {
 
   useEffect(() => {
     let isMounted = true;
+
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .get()
