@@ -154,44 +154,23 @@ const MapScreenProf = (props) => {
       </View>
     );
   }
-
-  if (!onCall) {
-    return (
-      <MapView
-        showsUserLocation
-        zoomEnabled
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: latitude, //latitude
-          longitude: longitude, //longitude
-          // latitudeDelta: 0.0922,
-          // longitudeDelta: 0.0421,
-          latitudeDelta: 0.122,
-          longitudeDelta: 0.0821,
-        }}
-      >
-        {isOnline ? online : offline}
-      </MapView>
-    );
-  } else {
-    return (
-      <MapView
-        showsUserLocation
-        zoomEnabled
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: latitude, //latitude
-          longitude: longitude, //longitude
-          // latitudeDelta: 0.0922,
-          // longitudeDelta: 0.0421,
-          latitudeDelta: 0.222,
-          longitudeDelta: 0.121,
-        }}
-      >
-        {isOnline ? online : offline}
-      </MapView>
-    );
-  }
+  return (
+    <MapView
+      showsUserLocation
+      zoomEnabled
+      style={{ flex: 1 }}
+      initialRegion={{
+        latitude: latitude, //latitude
+        longitude: longitude, //longitude
+        // latitudeDelta: 0.0922,
+        // longitudeDelta: 0.0421,
+        latitudeDelta: 0.222,
+        longitudeDelta: 0.121,
+      }}
+    >
+      {isOnline ? online : offline}
+    </MapView>
+  );
 };
 
 const mapStateToProps = (store) => ({

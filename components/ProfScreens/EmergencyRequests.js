@@ -69,18 +69,19 @@ const EmergencyRequests = (props) => {
         const emergencies = [];
         snapshot.forEach((doc) => {
           findCity(doc.data().latitude, doc.data().longitude);
-
-          emergencies.push({
-            accepted: doc.data().accepted,
-            breed: doc.data().breed,
-            type: doc.data().typeOfEmergency,
-            user_id: doc.data().user_id,
-            id: doc.id,
-            vet_id: doc.data().vet_id,
-            city: city,
-            latitude: doc.data().latitude,
-            longitude: doc.data().longitude,
-          });
+          if (doc.data().accepted == false) {
+            emergencies.push({
+              accepted: doc.data().accepted,
+              breed: doc.data().breed,
+              type: doc.data().typeOfEmergency,
+              user_id: doc.data().user_id,
+              id: doc.id,
+              vet_id: doc.data().vet_id,
+              city: city,
+              latitude: doc.data().latitude,
+              longitude: doc.data().longitude,
+            });
+          }
         });
         setRequests(emergencies);
       },

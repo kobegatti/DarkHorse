@@ -57,11 +57,15 @@ const RequestInfo = (props) => {
       })
       .catch((error) => alert(error.message));
 
-    // delete Emergency
+    // set Emergency to Accepted
     db.collection("Emergencies")
       .doc(emergencyID)
-      .delete()
+      .update({ accepted: true })
       .catch((error) => alert(error.message));
+    // db.collection("Emergencies")
+    //   .doc(emergencyID)
+    //   .delete()
+    //   .catch((error) => alert(error.message));
 
     // Vets
     // Set onCall to true, add appointment to vet's queue
@@ -75,9 +79,11 @@ const RequestInfo = (props) => {
           emergency_id: emergencyID,
           accepted: true,
           vet_id: auth.currentUser.uid,
+          latitude: latitude,
+          longitude: longitude,
         }),
       })
-      .then(props.navigation.navigate("Map"))
+      .then(props.navigation.navigate("EmergencyRequests"))
       .catch((error) => alert(error.message));
   };
 
