@@ -6,6 +6,7 @@ module.exports = function (api) {
     plugins: [
       "@babel/transform-react-jsx-source",
       "module:react-native-dotenv",
+      "react-native-reanimated/plugin",
     ],
   };
 };

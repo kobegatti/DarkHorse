@@ -16,6 +16,8 @@ import { auth, db } from "./config/firebase";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
+import "react-native-gesture-handler";
+
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./redux/reducers";
@@ -126,7 +128,7 @@ export class App extends Component {
             <Stack.Screen
               name="LogInScreen"
               component={LogInScreen}
-              options={{ title: "Login" }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="SignUpScreen"
