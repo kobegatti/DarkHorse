@@ -41,7 +41,7 @@ const MyRequests = (props) => {
         <Text style={[styles.not_accepted, textColor]}>Not Accepted</Text>
       )}
 
-      {
+      {/* {
         <TouchableOpacity
           style={styles.statusButton}
           onPress={() =>
@@ -56,7 +56,7 @@ const MyRequests = (props) => {
         >
           <Text style={styles.panelButtonTitle}>Update Status</Text>
         </TouchableOpacity>
-      }
+      } */}
     </View>
   );
 

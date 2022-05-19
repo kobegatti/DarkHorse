@@ -26,7 +26,6 @@ const AppointmentInfo = (props) => {
   const [longitude, setLongitude] = useState("");
 
   const handleComplete = () => {
-    // remove fron vet emergency list
     const vet_completed = {
       accepted: accepted,
       breed: breed,
@@ -46,10 +45,20 @@ const AppointmentInfo = (props) => {
       vet_id: vetID,
     };
 
+    // remove from vet emergency list
     db.collection("Users")
       .doc(vetID)
       .update({
-        appointments: firebase.firestore.FieldValue.arrayRemove(vet_completed),
+        appointments: firebase.firestore.FieldValue.arrayRemove({
+          accepted: true,
+          breed: breed,
+          emergency_id: emergencyID,
+          latitude: latitude,
+          longitude: longitude,
+          type: typeOfEmergency,
+          user_id: ownerID,
+          vet_id: vetID,
+        }),
       })
       .catch((error) => console.log(error));
 
@@ -57,7 +66,13 @@ const AppointmentInfo = (props) => {
     db.collection("Users")
       .doc(ownerID)
       .update({
-        emergencies: firebase.firestore.FieldValue.arrayRemove(owner_completed),
+        emergencies: firebase.firestore.FieldValue.arrayRemove({
+          accepted: true,
+          breed: breed,
+          emergency_id: emergencyID,
+          type: typeOfEmergency,
+          vet_id: vetID,
+        }),
       });
 
     // remove from emergencies

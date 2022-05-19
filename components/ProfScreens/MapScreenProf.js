@@ -91,6 +91,23 @@ const MapScreenProf = (props) => {
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
 
+      // setMarkers([
+      //   {
+      //     title: "hello",
+      //     coordinates: {
+      //       latitude: 35.3,
+      //       longitude: -120.2,
+      //     },
+      //   },
+      //   {
+      //     title: "howdy",
+      //     coordinates: {
+      //       latitude: 36,
+      //       longitude: -121,
+      //     },
+      //   },
+      // ]);
+
       //update online status
       db.collection("Users")
         .doc(auth.currentUser.uid)
@@ -108,23 +125,35 @@ const MapScreenProf = (props) => {
           }
         );
 
-      // get vet's appointments
+      // get vet's appointments and update markers
       db.collection("Users")
         .doc(auth.currentUser.uid)
         .onSnapshot(
           (snapshot) => {
+            const m = [];
             if (snapshot.exists) {
               snapshot.data().appointments.forEach((appointment) => {
-                console.log(appointment);
+                // console.log(" A = " + JSON.stringify(appointment));
+                m.push({
+                  coordinates: {
+                    latitude: appointment.latitude,
+                    longitude: appointment.longitude,
+                  },
+                  title: appointment.type,
+                });
               });
             } else {
               console.log("No such user!");
             }
+
+            setMarkers(m);
           },
           (error) => {
             console.log(error.message);
           }
         );
+
+      console.log(markers);
 
       // update user location
       db.collection("Users")
@@ -169,6 +198,13 @@ const MapScreenProf = (props) => {
       }}
     >
       {isOnline ? online : offline}
+      {markers.map((marker) => (
+        <MapView.Marker
+          key={marker.title}
+          coordinate={marker.coordinates}
+          title={marker.title}
+        />
+      ))}
     </MapView>
   );
 };

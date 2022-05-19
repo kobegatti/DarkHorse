@@ -62,12 +62,11 @@ const RequestInfo = (props) => {
       .doc(emergencyID)
       .update({ accepted: true })
       .catch((error) => alert(error.message));
-    // db.collection("Emergencies")
-    //   .doc(emergencyID)
-    //   .delete()
-    //   .catch((error) => alert(error.message));
 
     // Vets
+
+    // Add owner location to map marker array
+
     // Set onCall to true, add appointment to vet's queue
     db.collection("Users")
       .doc(auth.currentUser.uid)
@@ -127,8 +126,8 @@ const RequestInfo = (props) => {
         <Text style={styles.text_content}>{breed}</Text>
         <Text style={styles.text_title}>Location</Text>
         <Text style={styles.text_content}>{city}</Text>
-        <Text>{"user ID = " + ownerID}</Text>
-        <Text>{"emergencyID = " + emergencyID}</Text>
+        {/* <Text>{"user ID = " + ownerID}</Text>
+        <Text>{"emergencyID = " + emergencyID}</Text> */}
         {/* <Text>{JSON.stringify(props)}</Text> */}
       </SafeAreaView>
       <TouchableOpacity
