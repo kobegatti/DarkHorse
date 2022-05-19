@@ -83,23 +83,31 @@ const AppointmentInfo = (props) => {
       breed: breed,
       emergency_id: emergencyID,
       type: typeOfEmergency,
-      vet_id: vetID,
+      vet_id: "",
     };
 
     // Remove emergency on vet
     db.collection("Users")
       .doc(vetID)
       .update({
-        appointments:
-          firebase.firestore.FieldValue.arrayRemove(vet_appointment),
+        appointments: firebase.firestore.FieldValue.arrayRemove({
+          accepted: true,
+          breed: breed,
+          emergency_id: emergencyID,
+          latitude: latitude,
+          longitude: longitude,
+          type: typeOfEmergency,
+          user_id: ownerID,
+          vet_id: vetID,
+        }),
       });
 
     // Update accepted value on horse owner
     db.collection("Users")
       .doc(ownerID)
       .update({
-        appointments: firebase.firestore.FieldValue.arrayRemove({
-          accepted: accepted,
+        emergencies: firebase.firestore.FieldValue.arrayRemove({
+          accepted: true,
           breed: breed,
           emergency_id: emergencyID,
           type: typeOfEmergency,
@@ -108,9 +116,9 @@ const AppointmentInfo = (props) => {
       });
 
     db.collection("Users")
-      .doc(vetID)
+      .doc(ownerID)
       .update({
-        appointments:
+        emergencies:
           firebase.firestore.FieldValue.arrayUnion(owner_appointment),
       });
 
@@ -118,6 +126,8 @@ const AppointmentInfo = (props) => {
     db.collection("Emergencies").doc(emergencyID).update({
       accepted: false,
     });
+
+    props.navigation.navigate("MyEmergencies");
   };
 
   useEffect(() => {
@@ -131,6 +141,16 @@ const AppointmentInfo = (props) => {
     setOwnerID(props.route.params.user_id);
     setLatitude(props.route.params.latitude);
     setLongitude(props.route.params.longitude);
+
+    db.collection("Users")
+      .doc(props.route.params.vet_id)
+      .onSnapshot((snapshot) => {
+        if (snapshot.exists) {
+          snapshot.data().appointments.forEach((a) => {
+            console.log(a);
+          });
+        }
+      });
 
     return () => {
       isMounted = false;
@@ -148,6 +168,8 @@ const AppointmentInfo = (props) => {
         <Text style={styles.text_content}>{city}</Text>
         <Text>{"user ID = " + ownerID}</Text>
         <Text>{"emergencyID = " + emergencyID}</Text>
+        <Text>{"latitude = " + latitude}</Text>
+        <Text>{"longitude = " + longitude}</Text>
         {/* <Text>{JSON.stringify(props)}</Text> */}
       </SafeAreaView>
       <TouchableOpacity
@@ -157,7 +179,7 @@ const AppointmentInfo = (props) => {
         <Text style={styles.panelButtonTitle}>Completed?</Text>
       </TouchableOpacity>
 
-      <View style={{ marginBottom: 50 }}></View>
+      <View style={{ marginBottom: 20 }}></View>
 
       <TouchableOpacity
         style={styles.abortButton}
@@ -215,7 +237,7 @@ const styles = StyleSheet.create({
     marginRight: 50,
     backgroundColor: "green", // FF6347
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   abortButton: {
     padding: 35,

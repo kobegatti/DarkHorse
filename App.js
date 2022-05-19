@@ -290,11 +290,11 @@ export class App extends Component {
                   },
                 }}
               />
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="MyEmergencies"
                 component={MyEmergencies}
                 options={{ headerShown: false }}
-              />
+              /> */}
               <Stack.Screen
                 name="LogInScreen"
                 component={LogInScreen}
