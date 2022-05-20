@@ -13,12 +13,11 @@ import {
   Dimensions,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-// import { block } from "react-native-reanimated";
 import { auth, db } from "../config/firebase";
+
 const { width, height } = Dimensions.get("screen");
 
 const LogInScreen = () => {
-  //const [currentUser, setCurrentUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +32,6 @@ const LogInScreen = () => {
         navigation.navigate("CareX");
       }
     });
-
     return unsubscribe;
   }, []);
 
@@ -51,7 +49,6 @@ const LogInScreen = () => {
           .get()
           .then((snapshot) => {
             if (snapshot.exists) {
-              //console.log(snapshot.data());
               if (snapshot.data().typeOfUser == "Horse Owner") {
                 console.log("carex navigate");
                 navigation.navigate("CareX");
@@ -127,8 +124,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   text: {
-    // marginVertical: 10,
-    paddingBottom: 90,
+    paddingBottom: 30,
     fontSize: 40,
     fontWeight: "bold",
     fontFamily: "Calibri",
@@ -137,9 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     alignItems: "center",
-    // flexDirection: "column",
     justifyContent: "center",
-    // padding: 35,
     backgroundColor: "#fff",
   },
   inputStyle: {

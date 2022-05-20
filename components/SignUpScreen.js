@@ -131,27 +131,6 @@ const SignUpScreen = ({ navigation }) => {
         })
         .catch((error) => alert(error.message));
     }
-    // auth
-    //   .createUserWithEmailAndPassword(email.trim(), password.trim())
-    //   .then((userCredentials) => {
-    //     console.log(username);
-    //     db.collection("Users").doc(userCredentials.user.uid).set({
-    //       username: username,
-    //       typeOfUser: typeOfUser,
-    //       email: email.trim(),
-    //       userImg: null,
-    //       breeds: [],
-    //       bio: "",
-    //       title: "",
-    //       workPhone: "",
-    //       workEmail: "",
-    //       location: "",
-    //       online: false,
-    //       user_latitude: null,
-    //       user_longitude: null,
-    //     });
-    //   })
-    //   .catch((error) => alert(error.message));
 
     setUsername("");
     setTypeOfUser("");

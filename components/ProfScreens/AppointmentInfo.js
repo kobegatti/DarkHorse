@@ -35,6 +35,7 @@ const AppointmentInfo = (props) => {
       type: typeOfEmergency,
       user_id: ownerID,
       vet_id: vetID,
+      city: city,
     };
 
     const owner_completed = {
@@ -58,6 +59,7 @@ const AppointmentInfo = (props) => {
           type: typeOfEmergency,
           user_id: ownerID,
           vet_id: vetID,
+          city: city,
         }),
       })
       .catch((error) => console.log(error));
@@ -114,6 +116,7 @@ const AppointmentInfo = (props) => {
           type: typeOfEmergency,
           user_id: ownerID,
           vet_id: vetID,
+          city: city,
         }),
       });
 
@@ -181,11 +184,6 @@ const AppointmentInfo = (props) => {
         <Text style={styles.text_content}>{breed}</Text>
         <Text style={styles.text_title}>Location</Text>
         <Text style={styles.text_content}>{city}</Text>
-        <Text>{"user ID = " + ownerID}</Text>
-        <Text>{"emergencyID = " + emergencyID}</Text>
-        <Text>{"latitude = " + latitude}</Text>
-        <Text>{"longitude = " + longitude}</Text>
-        {/* <Text>{JSON.stringify(props)}</Text> */}
       </SafeAreaView>
       <TouchableOpacity
         style={styles.commandButton}

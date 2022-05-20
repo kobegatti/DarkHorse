@@ -37,7 +37,6 @@ const EditProfileScreenOwner = (props) => {
       .then((snapshot) => {
         if (snapshot.exists) {
           setCurrentUser(snapshot.data());
-          //console.log(snapshot.data());
           setUsername(snapshot.data().username);
           setBreeds(snapshot.data().breeds);
         } else {
@@ -228,12 +227,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#FFFFFF",
     paddingTop: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: '#000000',
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 5,
-    // shadowOpacity: 0.4,
   },
   header: {
     backgroundColor: "#FFFFFF",

@@ -90,8 +90,6 @@ const ProfileScreenProf = (props) => {
             <Caption style={styles.caption}>{currentUser.typeOfUser}</Caption>
             <View style={{ flexDirection: "row" }}>
               <Caption style={{ flex: 1, flexWrap: "wrap" }}>
-                {/* DummyText Lorem ipsum dolor sit amet, consectetuer adipiscing
-                elit. Aenean commodo ligula eget dolor. Aenean m */}
                 {currentUser.bio === "" ? "Short Bio Here" : currentUser.bio}
               </Caption>
             </View>
@@ -140,31 +138,6 @@ const ProfileScreenProf = (props) => {
           </Text>
         </View>
 
-        {/* <input onkeydown="phoneNumberFormatter()" id="phone-number" />
-
-        <script>
-          function formatPhoneNumber(value) {
-            if (!value) return value;
-            const phoneNumber = value.replace(/[^\d]/g, '');
-            const phoneNumberLength = phoneNumber.length;
-
-            if (phoneNumberLength < 4) return phoneNumber;
-            if (phoneNumberLenght < 7) {
-              return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-            }
-            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-              3,
-              6,
-              )}-${phoneNumber.slice(6,9)}`;
-          }
-
-          function phoneNumberFormatter() {
-            const inputField = document.getElementById('phone-number');
-            const formattedInputValue = formatPhoneNumber(inputField.value);
-            inputField.value = formattedInputValue;
-          }
-        </script> */}
-
         <View style={styles.row}>
           <FontAwesome name="envelope" color="#183153" size={30} />
           <Text style={styles.text}>
@@ -176,14 +149,7 @@ const ProfileScreenProf = (props) => {
 
         <View>
           <TouchableRipple onPress={() => {}}>
-            <View
-              style={styles.row}
-              // style={{
-              //   flexDirection: "row",
-              //   paddingHorizontal: 30,
-              //   marginVertical: 12.5,
-              // }}
-            >
+            <View style={styles.row}>
               <FontAwesome name="gear" color="#183153" size={30} />
               <Text style={styles.text}>Settings</Text>
             </View>
@@ -294,11 +260,6 @@ const styles = StyleSheet.create({
   text: {
     color: "#183153",
     marginLeft: 20,
-    // marginBottom: 25,
-    // alignItems: 'center',
-    // fontWeight: "bold",
-    // fontFamily: "Arial",
-    // fontFamily: "Arial",
     fontSize: 15,
     alignSelf: "center",
   },

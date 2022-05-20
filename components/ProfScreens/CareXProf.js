@@ -1,7 +1,5 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { auth } from "../../config/firebase";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -13,7 +11,6 @@ import ProfileScreenProf from "./ProfileScreenProf";
 import MapScreenProf from "./MapScreenProf";
 import EmergencyRequests from "./EmergencyRequests";
 import MyEmergencies from "./MyEmergencies";
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -35,7 +32,6 @@ export class CareXProf extends Component {
   };
 
   render() {
-    // const { currentUser } = this.props;
     return (
       <Tab.Navigator initialRouteName="EmergencyRequests" labeled={false}>
         <Tab.Screen

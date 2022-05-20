@@ -38,6 +38,9 @@ import EmergencyInfo from "./components/OwnerScreens/EmergencyInfo";
 import AppointmentInfo from "./components/ProfScreens/AppointmentInfo";
 import MyEmergencies from "./components/ProfScreens/MyEmergencies";
 
+import * as Font from "expo-font";
+import useFonts from "./useFonts";
+
 const dimensions = Dimensions.get("window");
 const imageHeight = (dimensions.height * 9) / 16;
 const imageWidth = dimensions.width;
@@ -83,6 +86,8 @@ export class App extends Component {
           });
       }
     });
+
+    useFonts();
   }
 
   componentWillUnmount() {

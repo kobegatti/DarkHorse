@@ -35,7 +35,6 @@ export class CareX extends Component {
   };
 
   render() {
-    //const { currentUser } = this.props;
     return (
       <Tab.Navigator initialRouteName="EmergencyForm" labeled={false}>
         <Tab.Screen

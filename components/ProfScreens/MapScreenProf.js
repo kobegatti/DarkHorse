@@ -63,16 +63,11 @@ const MapScreenProf = (props) => {
   );
 
   function updateAvailability() {
-    // let isMounted = true;
     db.collection("Users")
       .doc(auth.currentUser.uid)
       .update({ online: !isOnline })
       .then(console.log("availability updated!"));
     setIsOnline(!isOnline);
-
-    // return () => {
-    //   isMounted = false;
-    // };
   }
 
   useEffect(() => {
@@ -90,81 +85,52 @@ const MapScreenProf = (props) => {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-
-      // setMarkers([
-      //   {
-      //     title: "hello",
-      //     coordinates: {
-      //       latitude: 35.3,
-      //       longitude: -120.2,
-      //     },
-      //   },
-      //   {
-      //     title: "howdy",
-      //     coordinates: {
-      //       latitude: 36,
-      //       longitude: -121,
-      //     },
-      //   },
-      // ]);
-
-      //update online status
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .onSnapshot(
-          (snapshot) => {
-            if (snapshot.exists) {
-              setIsOnline(snapshot.data().online);
-              setOnCall(snapshot.data().onCall);
-            } else {
-              console.log("No such user!");
-            }
-          },
-          (error) => {
-            console.log(error.message);
-          }
-        );
-
-      // get vet's appointments and update markers
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .onSnapshot(
-          (snapshot) => {
-            const m = [];
-            if (snapshot.exists) {
-              snapshot.data().appointments.forEach((appointment) => {
-                // console.log(" A = " + JSON.stringify(appointment));
-                m.push({
-                  coordinates: {
-                    latitude: appointment.latitude,
-                    longitude: appointment.longitude,
-                  },
-                  title: appointment.type,
-                });
-              });
-            } else {
-              console.log("No such user!");
-            }
-
-            setMarkers(m);
-          },
-          (error) => {
-            console.log(error.message);
-          }
-        );
-
-      console.log(markers);
-
-      // update user location
-      db.collection("Users")
-        .doc(auth.currentUser.uid)
-        .update({ user_latitude: latitude, user_longitude: longitude })
-        .then(console.log("location updated!"))
-        .catch((error) => alert(error.message));
-
-      props.navigation.addListener("focus", () => setLoading(!loading));
     })();
+
+    //update online status
+    // get vet's appointments and update markers
+    const unsubscribe_1 = db
+      .collection("Users")
+      .doc(auth.currentUser.uid)
+      .onSnapshot(
+        (snapshot) => {
+          const m = [];
+
+          if (snapshot.exists) {
+            setIsOnline(snapshot.data().online);
+            setOnCall(snapshot.data().onCall);
+
+            snapshot.data().appointments.forEach((appointment) => {
+              m.push({
+                coordinates: {
+                  latitude: appointment.latitude,
+                  longitude: appointment.longitude,
+                },
+                title: appointment.type,
+              });
+            });
+          } else {
+            console.log("No such user!");
+          }
+
+          setMarkers(m);
+        },
+        (error) => {
+          console.log(error.message);
+        }
+      );
+
+    // update user location
+    db.collection("Users")
+      .doc(auth.currentUser.uid)
+      .update({ user_latitude: latitude, user_longitude: longitude })
+      .then(console.log("location updated!"))
+      .catch((error) => alert(error.message));
+
+    props.navigation.addListener("focus", () => setLoading(!loading));
+
     return () => {
+      unsubscribe_1();
       isMounted = false;
     };
   }, [props.navigation, latitude, longitude, isOnline]);

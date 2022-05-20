@@ -29,10 +29,7 @@ const MyRequests = (props) => {
   };
 
   const Item = ({ item, backgroundColor, textColor }) => (
-    <View
-      // onPress={() => props.navigation.navigate("EmergencyInfo")}
-      style={[styles.item, backgroundColor]}
-    >
+    <View style={[styles.item, backgroundColor]}>
       <Text style={[styles.injury, textColor]}>{item.type}</Text>
       <Text style={[styles.info, textColor]}>{item.breed}</Text>
       {item.accepted ? (
@@ -40,23 +37,6 @@ const MyRequests = (props) => {
       ) : (
         <Text style={[styles.not_accepted, textColor]}>Not Accepted</Text>
       )}
-
-      {/* {
-        <TouchableOpacity
-          style={styles.statusButton}
-          onPress={() =>
-            props.navigation.navigate("EmergencyInfo", {
-              vet_id: item.vet_id,
-              type: item.type,
-              breed: item.breed,
-              accepted: item.accepted,
-              emergency_id: item.id,
-            })
-          }
-        >
-          <Text style={styles.panelButtonTitle}>Update Status</Text>
-        </TouchableOpacity>
-      } */}
     </View>
   );
 
@@ -68,12 +48,12 @@ const MyRequests = (props) => {
 
   useEffect(() => {
     let isMounted = true;
-    db.collection("Users")
+    const unsubscribe_1 = db
+      .collection("Users")
       .doc(auth.currentUser.uid)
       .onSnapshot(
         (snapshot) => {
           const requests = [];
-          // console.log(snapshot.data().emergencies);
           snapshot.data().emergencies.forEach((e) => {
             requests.push({
               accepted: e.accepted,
@@ -93,6 +73,7 @@ const MyRequests = (props) => {
       );
 
     return () => {
+      unsubscribe_1();
       isMounted = false;
     };
   }, [props.navigation, loading]);

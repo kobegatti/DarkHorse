@@ -19,13 +19,10 @@ const EmergencyRequests = (props) => {
   const [currentUser, setCurrentUser] = useState(props);
   const [requests, setRequests] = useState([]);
   const [city, setCity] = useState("");
-  const [currentEmergency, setCurrentEmergency] = useState(null);
-  const [onCall, setOnCall] = useState(null);
-  const [isOnline, setIsOnline] = useState(null);
-  const [isMounted, setIsMounted] = useState(true);
 
   // location info
   const findCity = async (latitude, longitude) => {
+    let isMounted = true;
     try {
       const place = await Location.reverseGeocodeAsync({
         latitude: latitude,
@@ -41,19 +38,21 @@ const EmergencyRequests = (props) => {
       console.log(error);
     }
 
-    setIsMounted(false);
+    return () => {
+      isMounted = false;
+    };
   };
 
   useEffect(() => {
+    let isMounted = true;
     // Get Current User
-    db.collection("Users")
+    const unsubscribe_1 = db
+      .collection("Users")
       .doc(auth.currentUser.uid)
       .onSnapshot(
         (snapshot) => {
           if (snapshot.exists) {
             setCurrentUser(snapshot.data());
-            setCurrentEmergency(snapshot.data().emergency);
-            setOnCall(snapshot.data().onCall);
           } else {
             console.log("user does not exist");
           }
@@ -70,7 +69,7 @@ const EmergencyRequests = (props) => {
       .catch((error) => alert(error.message));
 
     // Get Emergencies
-    db.collection("Emergencies").onSnapshot(
+    const unsubscribe_2 = db.collection("Emergencies").onSnapshot(
       (snapshot) => {
         const emergencies = [];
         snapshot.forEach((doc) => {
@@ -98,7 +97,9 @@ const EmergencyRequests = (props) => {
     props.navigation.addListener("focus", () => setLoading(!loading));
 
     return () => {
-      isMounted;
+      unsubscribe_1();
+      unsubscribe_2();
+      isMounted = false;
     };
   }, [props.navigation, loading, city]);
 
@@ -151,7 +152,6 @@ const EmergencyRequests = (props) => {
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={listSeparator}
       />
-      {/* <Text>{JSON.stringify(currentEmergency)}</Text> */}
     </SafeAreaView>
   );
 };

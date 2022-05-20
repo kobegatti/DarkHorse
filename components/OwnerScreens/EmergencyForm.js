@@ -73,7 +73,6 @@ const EmergencyForm = (props) => {
       .get()
       .then((snapshot) => {
         snapshot.forEach((request) => {
-          // console.log(request.id + " => " + request.data());
           if (typeOfEmergency == "Other") {
             if (
               breed == request.data().breed &&

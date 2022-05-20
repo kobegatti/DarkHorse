@@ -20,7 +20,6 @@ const MyEmergencies = (props) => {
   const [currentUser, setCurrentUser] = useState(props);
   const [appointments, setAppointments] = useState([]);
   const [city, setCity] = useState("");
-  const [isMounted, setIsMounted] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   const Item = ({ item, backgroundColor, textColor }) => (
@@ -56,6 +55,7 @@ const MyEmergencies = (props) => {
 
   // location info
   const findCity = async (latitude, longitude) => {
+    let isMounted = true;
     try {
       const place = await Location.reverseGeocodeAsync({
         latitude: latitude,
@@ -72,13 +72,17 @@ const MyEmergencies = (props) => {
       console.log(error);
     }
     console.log("city = " + city);
-    setIsMounted(false);
+
+    return () => {
+      isMounted = false;
+    };
   };
 
   useEffect(() => {
-    // let isMounted = true;
+    let isMounted = true;
 
-    db.collection("Users")
+    const unsubscribe_1 = db
+      .collection("Users")
       .doc(auth.currentUser.uid)
       .onSnapshot(
         (snapshot) => {
@@ -95,7 +99,7 @@ const MyEmergencies = (props) => {
                 emergency_id: a.emergency_id,
                 vet_id: a.vet_id,
                 user_id: a.user_id,
-                city: city,
+                city: a.city,
                 latitude: a.latitude,
                 longitude: a.longitude,
               });
@@ -113,9 +117,10 @@ const MyEmergencies = (props) => {
       );
 
     return () => {
-      isMounted;
+      unsubscribe_1();
+      isMounted = false;
     };
-  }, [props.navigation, loading, isMounted]);
+  }, [props.navigation, loading]);
 
   const listSeparator = () => {
     return (
